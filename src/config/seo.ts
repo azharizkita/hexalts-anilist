@@ -2,10 +2,10 @@ import type { DefaultSeoProps } from "next-seo";
 
 export const SEO: DefaultSeoProps = {
   title: undefined,
-  titleTemplate: "%s | Hexalts AniList",
-  defaultTitle: "Hexalts AniList",
+  titleTemplate: "%s | Hexalts x AniList",
+  defaultTitle: "Hexalts x AniList",
 
-  description: "The best site for your inner weebs",
+  description: "The best watchlister site ever for your inner weebs",
 
   additionalMetaTags: [
     {
