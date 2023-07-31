@@ -1,3 +1,4 @@
+import { PageLayout } from "@/components/PageLayout";
 import { anilistClient } from "@/config/apolloClient";
 import { SEO } from "@/config/seo";
 import { theme } from "@/styles/theme";
@@ -11,7 +12,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <ChakraProvider resetCSS theme={theme}>
       <DefaultSeo {...SEO} />
       <ApolloProvider client={anilistClient}>
-        <Component {...pageProps} />
+        <PageLayout>
+          <Component {...pageProps} />
+        </PageLayout>
       </ApolloProvider>
     </ChakraProvider>
   );
