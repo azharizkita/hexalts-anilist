@@ -39,7 +39,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
             exit={{ opacity: 0 }}
             transition={{
               type: "spring",
-              stiffness: 250,
+              stiffness: 150,
               damping: 20,
             }}
           >
