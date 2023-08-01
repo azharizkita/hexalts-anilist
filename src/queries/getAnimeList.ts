@@ -14,18 +14,41 @@ export const GET_ANIME_LIST = gql`
         title {
           romaji
           english
+          native
         }
-        bannerImage
         coverImage {
-          medium
-          large
+          extraLarge
         }
       }
     }
   }
 `;
 
-type PageInfo = {
+export const GET_ANIME_LIST_WITH_SEARCH = gql`
+  query GetAnimeList($offset: Int!, $limit: Int!, $keyword: String) {
+    Page(page: $offset, perPage: $limit) {
+      pageInfo {
+        total
+        perPage
+        lastPage
+        hasNextPage
+      }
+      media(sort: [SCORE_DESC], type: ANIME, search: $keyword) {
+        id
+        title {
+          romaji
+          english
+          native
+        }
+        coverImage {
+          extraLarge
+        }
+      }
+    }
+  }
+`;
+
+export type PageInfo = {
   total: number;
   perPage: number;
   lastPage: number;
@@ -37,10 +60,12 @@ export type AnimeItem = {
   title: {
     romaji: string;
     english: string;
+    native: string;
   };
   bannerImage: string;
   coverImage: {
-    medium: string;
+    extraLarge: string;
+    color: string;
   };
 };
 

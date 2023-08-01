@@ -8,6 +8,7 @@ import {
 import { CollectionDeleteModal } from "@/components/Collection/CollectionDeleteModal";
 import { CollectionItem } from "@/components/Collection/CollectionItem";
 import { CollectionEditModal } from "@/components/Collection/CollectionEditModal";
+
 export interface WatchlistItem {
   id: string;
   title: string;
@@ -26,7 +27,12 @@ const CollectionPage = () => {
       </Flex>
       <Divider />
       <Flex direction="column" overflow="auto" id="asd">
-        <SimpleGrid columns={2} spacing="1em" overflow="auto" py="1em">
+        <SimpleGrid
+          columns={[2, 3, 4, 5]}
+          spacing="1em"
+          overflow="auto"
+          py="1em"
+        >
           {collections.map(({ id, title, imageUrl, watchlist }) => (
             <Center key={id} w="100%">
               <CollectionItem

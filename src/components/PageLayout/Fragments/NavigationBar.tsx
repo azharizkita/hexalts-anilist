@@ -5,6 +5,7 @@ import { IconButton } from "@/components/base/IconButton";
 import { Link } from "@chakra-ui/next-js";
 import { SearchInput } from "@/components/base/SearchInput";
 import { useRouter } from "next/router";
+import { useLayoutEffect } from "react";
 
 const NavigationBarWrapper = styled(Flex)`
   align-items: center;
@@ -15,7 +16,9 @@ const NavigationBarWrapper = styled(Flex)`
 
 export const NavigationBar = () => {
   const [isLarge] = useMediaQuery("(min-width: 625px)");
-  const { push } = useRouter();
+  const { push, query } = useRouter();
+  const { keyword = "" } = query;
+
   return (
     <NavigationBarWrapper gap="1em" height={isLarge ? "4em" : "5em"}>
       {isLarge && (
@@ -33,12 +36,20 @@ export const NavigationBar = () => {
           <Spacer />
         </>
       )}
-      <SearchInput />
+      <SearchInput
+        initialValue={keyword as string}
+        onSearch={(text) =>
+          push({
+            ...(text && { pathname: "/" }),
+            query: { ...(text && { keyword: text }) },
+          })
+        }
+      />
       {isLarge && (
         <>
           <Divider orientation="vertical" />
           <IconButton
-            onClick={() => push("/watchlist")}
+            onClick={() => push("/collection")}
             borderRadius="full"
             aria-label="watchlist-button"
             badgeCount={3}

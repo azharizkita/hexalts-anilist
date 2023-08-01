@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import { useCallback, useState, forwardRef, useEffect } from "react";
 import {
   Icon,
   IconButton,
@@ -19,12 +14,19 @@ import debounce from "lodash/debounce";
 
 interface SearchInputProps extends InputProps {
   onSearch?: (text: string) => void;
+  initialValue: string;
 }
 
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
-  ({ onSearch = () => {}, ...rest }, ref) => {
+  ({ onSearch = () => {}, initialValue = "", ...rest }, ref) => {
     const [isLarge] = useMediaQuery("(min-width: 625px)");
-    const [searchText, setSearchText] = useState("");
+    const [searchText, setSearchText] = useState<string | undefined>();
+
+    useEffect(() => {
+      if (typeof searchText === "undefined" && initialValue !== "") {
+        setSearchText(initialValue);
+      }
+    }, [initialValue, searchText]);
 
     const _handleSearchChange = useCallback(debounce(onSearch, 1000), []);
 
@@ -35,6 +37,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
 
     const handleClearSearch = () => {
       setSearchText("");
+      onSearch("");
     };
 
     return (

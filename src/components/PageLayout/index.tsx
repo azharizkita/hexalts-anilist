@@ -33,6 +33,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
         >
           <motion.div
             key={pathname}
+            style={{ height: "100%" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

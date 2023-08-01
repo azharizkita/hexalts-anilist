@@ -27,13 +27,9 @@ export const CollectionItem = ({
           <IconButton
             icon={<MdEdit />}
             onClick={() => {
-              console.log("sdaasd");
               if (id && title && typeof imageUrl !== "undefined") {
-              console.log("1231ewqwe23");
-
                 setCollectionToBeEdited({ id, title, imageUrl, watchlist });
               }
-              console.log("123123");
             }}
             borderColor="gray.200"
             borderWidth="thin"
