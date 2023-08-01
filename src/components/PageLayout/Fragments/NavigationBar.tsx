@@ -24,7 +24,7 @@ export const NavigationBar = () => {
       {isLarge && (
         <>
           <Flex w="6em">
-            <Link href="/">
+            <Link href="/anime">
               <Image
                 src="/hexalts_x_anilist.svg"
                 alt="logo"
@@ -40,7 +40,7 @@ export const NavigationBar = () => {
         initialValue={keyword as string}
         onSearch={(text) =>
           push({
-            ...(text && { pathname: "/" }),
+            ...(text && { pathname: "/anime" }),
             query: { ...(text && { keyword: text }) },
           })
         }
@@ -52,7 +52,6 @@ export const NavigationBar = () => {
             onClick={() => push("/collection")}
             borderRadius="full"
             aria-label="watchlist-button"
-            badgeCount={3}
             icon={<MdOutlinePlaylistPlay />}
           />
         </>

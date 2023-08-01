@@ -1,109 +1,42 @@
-import {
-  Center,
-  Divider,
-  Flex,
-  Heading,
-  SimpleGrid,
-  Spacer,
-} from "@chakra-ui/react";
-import type { AnimeItem } from "@/queries/getAnimeList";
-import { MovieItem } from "@/components/Movie/MovieItem";
-import { useGetAnimeList } from "@/hooks/useGetAnimeList";
+import { Flex, Image, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { Pagination } from "@/components/base/Pagination";
-export interface WatchlistItem {
-  id: string;
-  title: string;
-  imageUrl: string | null;
-  watchlist: AnimeItem[];
-}
+import { useEffect } from "react";
 
-const sampleAnimeItem: AnimeItem = {
-  id: 1,
-  title: {
-    romaji: "Sample Anime",
-    english: "Sample Anime",
-    native: "Sample Anime",
-  },
-  bannerImage: "sample_banner_image_url",
-  coverImage: {
-    color: "gray",
-    extraLarge: "sample_cover_image_url",
-  },
-};
+const HomePage = () => {
+  const { push } = useRouter();
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      push("/anime");
+    }, 3000);
 
-const mockedItems: AnimeItem[] = Array(10).fill(sampleAnimeItem);
-
-const AnimePage = () => {
-  const { query, push } = useRouter();
-  const { keyword = "", page = 1 } = query;
-  const { data, paginationMeta, loading } = useGetAnimeList({
-    offset: Number(page),
-    ...(keyword && { keyword: keyword as string }),
-    skip: !Boolean(page),
-  });
-
-  const handleChangePage = (newPage: number) => {
-    push({
-      query: {
-        ...(keyword && { keyword }),
-        page: newPage,
-      },
-    });
-  };
-
-  const _movieItems = !loading && data !== null ? data : mockedItems;
-
+    return () => clearTimeout(timeout);
+  }, []);
   return (
-    <Flex direction="column" overflow="auto" h="100%">
-      <Flex direction="column" gap="1em">
-        <Flex justify="space-between" justifyItems="center">
-          <Heading>Anime</Heading>
-        </Flex>
-        <Divider />
-      </Flex>
+    <Flex
+      direction="column"
+      overflow="auto"
+      h="100%"
+      align="center"
+      justify="center"
+    >
       <Flex
         direction="column"
-        overflow="auto"
-        id="asd"
-        h="100%"
-        justify="center"
+        align="center"
+        gap="2em"
+        bg="black"
+        p="2em"
+        borderRadius="3xl"
+        shadow="lg"
       >
-        <SimpleGrid
-          h="100%"
-          columns={[2, 3, 4, 5]}
-          spacing="1em"
-          overflow="auto"
-          py="0.5em"
-        >
-          {_movieItems.map(({ id, title, coverImage }, i) => (
-            <Center key={i} w="100%">
-              <MovieItem
-                id={id.toString()}
-                imageUrl={coverImage.extraLarge}
-                backgroundColor={coverImage.color}
-                subtitle={title.native}
-                title={title.romaji}
-                isLoading={loading}
-              />
-            </Center>
-          ))}
-        </SimpleGrid>
-        <Spacer />
-        <Divider />
-        <Flex w="full" align="center" justify="center" py="1em">
-          <Pagination
-            page={Number(page)}
-            lastPage={paginationMeta?.lastPage}
-            onClickNext={handleChangePage}
-            onClickPrev={handleChangePage}
-          />
-        </Flex>
+        <Image src="/hexalts_x_anilist.svg" alt="logo" h="full" w="16em" />
+        <Text align="center" color="white" fontWeight="bold">
+          The best site for your <br /> inner weebs
+        </Text>
       </Flex>
     </Flex>
   );
 };
 
-export default function Collection() {
-  return <AnimePage />;
+export default function Home() {
+  return <HomePage />;
 }

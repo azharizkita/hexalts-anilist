@@ -17,7 +17,7 @@ export const ActionBar = () => {
 
   const handleTabsChange = async (index: number) => {
     if (index === 0) {
-      await push("/");
+      await push("/anime");
     }
 
     if (index === 1) {
