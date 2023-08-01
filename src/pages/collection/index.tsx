@@ -1,43 +1,54 @@
 import { Center, Divider, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
-import { CollectionItem } from "@/components/CollectionItem";
 import type { AnimeItem } from "@/queries/getAnimeList";
-
-interface WatchlistItem {
+import { CollectionAdditionButton } from "@/components/Collection/CollectionAdditionButton";
+import {
+  CollectionContextProvider,
+  useCollectionContext,
+} from "@/context/collection";
+import { CollectionDeleteModal } from "@/components/Collection/CollectionDeleteModal";
+import { CollectionItem } from "@/components/Collection/CollectionItem";
+import { CollectionEditModal } from "@/components/Collection/CollectionEditModal";
+export interface WatchlistItem {
   id: string;
   title: string;
-  imageUrl: string;
+  imageUrl: string | null;
   watchlist: AnimeItem[];
 }
 
-export default function Home() {
-  const data: WatchlistItem[] = [
-    {
-      id: Date.now().toString(),
-      title: "test",
-      watchlist: [],
-      imageUrl:
-        "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx114129-RLgSuh6YbeYx.jpg",
-    },
-  ];
+const CollectionPage = () => {
+  const { collections } = useCollectionContext();
 
   return (
     <Flex gap="1em" direction="column" overflow="auto">
-      <Heading>My collection</Heading>
+      <Flex justify="space-between" justifyItems="center">
+        <Heading>My collection</Heading>
+        <CollectionAdditionButton />
+      </Flex>
       <Divider />
       <Flex direction="column" overflow="auto" id="asd">
-        <SimpleGrid columns={2} spacing="1em" overflow="auto">
-          {data.map(({ id, title, imageUrl, watchlist }) => (
+        <SimpleGrid columns={2} spacing="1em" overflow="auto" py="1em">
+          {collections.map(({ id, title, imageUrl, watchlist }) => (
             <Center key={id} w="100%">
               <CollectionItem
                 id={id}
                 imageUrl={imageUrl}
                 title={title}
-                totalItem={watchlist.length}
+                watchlist={watchlist}
               />
             </Center>
           ))}
         </SimpleGrid>
       </Flex>
     </Flex>
+  );
+};
+
+export default function Collection() {
+  return (
+    <CollectionContextProvider>
+      <CollectionPage />
+      <CollectionEditModal />
+      <CollectionDeleteModal />
+    </CollectionContextProvider>
   );
 }
