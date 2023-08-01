@@ -18,6 +18,7 @@ export const GET_ANIME_LIST = gql`
         bannerImage
         coverImage {
           medium
+          large
         }
       }
     }
@@ -31,7 +32,7 @@ type PageInfo = {
   hasNextPage: boolean;
 };
 
-type AnimeItem = {
+export type AnimeItem = {
   id: number;
   title: {
     romaji: string;

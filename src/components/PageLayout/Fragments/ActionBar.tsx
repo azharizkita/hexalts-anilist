@@ -8,7 +8,7 @@ export const ActionBar = () => {
   const [tabIndex, setTabIndex] = useState(-1);
 
   useEffect(() => {
-    if (pathname === "/watchlist") {
+    if (pathname === "/collection") {
       setTabIndex(1);
       return;
     }
@@ -21,7 +21,7 @@ export const ActionBar = () => {
     }
 
     if (index === 1) {
-      await push("/watchlist");
+      await push("/collection");
     }
 
     setTabIndex(index);
@@ -53,7 +53,7 @@ export const ActionBar = () => {
           bg="transparent"
         >
           <Icon boxSize="1.5em" as={MdPlaylistPlay} />
-          <Text fontSize="xs">Watch List</Text>
+          <Text fontSize="xs">My collection</Text>
         </Tab>
       </TabList>
     </Tabs>
