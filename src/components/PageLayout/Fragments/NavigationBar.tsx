@@ -17,7 +17,7 @@ const NavigationBarWrapper = styled(Flex)`
 export const NavigationBar = () => {
   const [isLarge] = useMediaQuery("(min-width: 625px)");
   const { push, query } = useRouter();
-  const { keyword = "" } = query;
+  const { keyword = "", page = 1 } = query;
 
   return (
     <NavigationBarWrapper gap="1em" height={isLarge ? "4em" : "5em"}>
@@ -41,6 +41,7 @@ export const NavigationBar = () => {
         onSearch={(text) =>
           push({
             ...(text && { pathname: "/anime" }),
+            ...(page && { page }),
             query: { ...(text && { keyword: text }) },
           })
         }

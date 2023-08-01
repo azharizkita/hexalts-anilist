@@ -14,6 +14,7 @@ import { useGetAnimeList } from "@/hooks/useGetAnimeList";
 import { useRouter } from "next/router";
 import { Pagination } from "@/components/base/Pagination";
 import { MdSentimentDissatisfied } from "react-icons/md";
+import { NextSeo } from "next-seo";
 export interface WatchlistItem {
   id: string;
   title: string;
@@ -70,17 +71,15 @@ const AnimePage = () => {
       <Flex
         direction="column"
         overflow="auto"
-        id="asd"
         h="100%"
-        justify="center"
+        justify={_movieItems.length !== 0 ? "initial" : "center"}
       >
         {_movieItems.length !== 0 ? (
           <SimpleGrid
-            h="100%"
             columns={[2, 3, 4, 5]}
             spacing="1em"
             overflow="auto"
-            py="0.5em"
+            py="1em"
           >
             {_movieItems.map(({ id, title, coverImage }, i) => (
               <Center key={i} w="100%">
@@ -125,5 +124,10 @@ const AnimePage = () => {
 };
 
 export default function Collection() {
-  return <AnimePage />;
+  return (
+    <>
+      <NextSeo title="Anime" />
+      <AnimePage />
+    </>
+  );
 }
