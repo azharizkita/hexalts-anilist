@@ -9,6 +9,7 @@ import {
   Image,
   SimpleGrid,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
@@ -30,8 +31,10 @@ const AnimeDetailsPage = ({
 }: Partial<AnimeDetails>) => {
   const status = _status?.toLowerCase();
   const adultry = isAdult ? "Yes" : "No";
+  const [isLarge] = useMediaQuery("(min-width: 625px)");
+
   return (
-    <Flex direction="column" overflow="auto" h="100%" w="full" gap="1em">
+    <Flex direction="column" overflow="auto" h="100%" w="full" gap="2em">
       <Flex h="12em" w="full" overflow="hidden" flexShrink={0}>
         <Image
           objectFit="cover"
@@ -40,7 +43,7 @@ const AnimeDetailsPage = ({
           alt="anime-banner"
         />
       </Flex>
-      <Flex px="1em" gap="1em">
+      <Container maxW="container.xl" as={Flex} gap="1em">
         <Flex
           transform="translateY(-30%)"
           borderRadius="xl"
@@ -59,7 +62,7 @@ const AnimeDetailsPage = ({
         </Flex>
         <Flex direction="column" gap="0.5em" w="full">
           <Heading fontSize="2xl">{title?.romaji}</Heading>
-          <SimpleGrid columns={2} spacing="0.5em" fontSize="sm" maxW="300px">
+          <SimpleGrid columns={2} spacing="0.25em" fontSize="sm" maxW="300px">
             <Text color="gray.500">Status</Text>
             <Text textTransform="capitalize">{status}</Text>
             <Text color="gray.500">Ep. duration</Text>
@@ -72,9 +75,16 @@ const AnimeDetailsPage = ({
             </Badge>
           </SimpleGrid>
         </Flex>
-      </Flex>
+      </Container>
       <Divider />
-      <Flex justify="space-around" align="center">
+      <Container
+        maxW="container.xl"
+        as={Flex}
+        justify="space-evenly"
+        align="center"
+        gap="1em"
+        w="100%"
+      >
         <Flex direction="column" w="fit-content" align="center">
           <Text fontSize="2xl" fontWeight="bold">
             {averageScore} / 100
@@ -86,7 +96,7 @@ const AnimeDetailsPage = ({
         <Button leftIcon={<Icon boxSize="1.5em" as={MdPlaylistPlay} />}>
           Add to collection
         </Button>
-      </Flex>
+      </Container>
       <Divider />
       <Container maxW="container.xl" as={Flex} flexDirection="column" gap="1em">
         <Heading as="h2" fontSize="2xl">
@@ -95,7 +105,7 @@ const AnimeDetailsPage = ({
         <Flex
           wrap="wrap"
           gap="0.5em"
-          justify="space-evenly"
+          justify={isLarge ? "start" : "space-evenly"}
           w="full"
           fontSize="sm"
         >
