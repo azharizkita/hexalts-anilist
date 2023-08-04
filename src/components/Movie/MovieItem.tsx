@@ -2,9 +2,12 @@ import {
   Flex,
   Icon,
   Image,
+  LinkBox,
+  LinkOverlay,
   Skeleton,
   Text,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { MdMovie } from "react-icons/md";
 
@@ -25,8 +28,15 @@ export const MovieItem = ({
   id,
 }: MovieListItemProps) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const { push } = useRouter();
   return (
     <Flex
+      as={LinkBox}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        push(`/anime/${id}`);
+      }}
       direction="column"
       w="145px"
       gap="0.5em"
@@ -35,6 +45,8 @@ export const MovieItem = ({
       justify="center"
     >
       <Flex
+        as={LinkOverlay}
+        href={!isLoading ? `/anime/${id}` : undefined}
         h="205px"
         w="145px"
         direction="column"

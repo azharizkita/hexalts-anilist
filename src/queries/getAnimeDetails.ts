@@ -13,29 +13,37 @@ export const GET_ANIME_DETAILS = gql`
       coverImage {
         large
       }
+      bannerImage
       episodes
       duration
       status
       genres
+      averageScore
+      isAdult
     }
   }
 `;
 
+export interface AnimeDetailsProps {
+  Media: AnimeDetails;
+}
+
 export interface AnimeDetails {
-  Media: {
-    id: number;
-    title: {
-      romaji: string;
-      english: string;
-      native: string;
-    };
-    description: string;
-    coverImage: {
-      large: string;
-    };
-    episodes: number;
-    duration: number;
-    status: string;
-    genres: string[];
+  id: number;
+  title: {
+    romaji: string;
+    english: string;
+    native: string;
   };
+  description: string;
+  coverImage: {
+    large: string;
+  };
+  bannerImage: string;
+  episodes: number;
+  duration: number;
+  status: string;
+  genres: string[];
+  averageScore: number;
+  isAdult: boolean;
 }

@@ -4,6 +4,7 @@ import React from "react";
 import { ActionBar } from "./Fragments/ActionBar";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
+import { PageContainer } from "./Fragments/PageContainer";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -23,14 +24,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
         bg="gray.50"
         borderTopRadius="2xl"
       >
-        <Container
-          maxW="container.xl"
-          w="full"
-          h="full"
-          as={Flex}
-          flexDirection="column"
-          pt="1em"
-        >
+        <PageContainer>
           <motion.div
             key={pathname}
             style={{ height: "100%" }}
@@ -45,7 +39,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
           >
             {children}
           </motion.div>
-        </Container>
+        </PageContainer>
       </Flex>
       {!isLarge && <ActionBar />}
     </Flex>
