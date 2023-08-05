@@ -1,6 +1,6 @@
 import { Container, Flex, useMediaQuery } from "@chakra-ui/react";
 import { NavigationBar } from "./Fragments/NavigationBar";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ActionBar } from "./Fragments/ActionBar";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -13,6 +13,7 @@ interface PageLayoutProps {
 export const PageLayout = ({ children }: PageLayoutProps) => {
   const { pathname } = useRouter();
   const [isLarge] = useMediaQuery("(min-width: 625px)");
+  const [isStandalone, setIsStandalone] = useState(false);
 
   const flexRef = useRef<HTMLDivElement>(null);
 
@@ -22,6 +23,8 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
         flexRef.current.style.height = `${window.innerHeight}px`;
       }
     };
+
+    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
 
     appHeight();
     window.addEventListener("resize", appHeight);
@@ -59,6 +62,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
         </PageContainer>
       </Flex>
       {!isLarge && <ActionBar />}
+      {!isLarge && isStandalone && <Flex h="2em" bg="gray.100" />}
     </Flex>
   );
 };
