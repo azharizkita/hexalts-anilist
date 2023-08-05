@@ -9,8 +9,6 @@ export const ModalContent = () => {
     animeData,
     isCreateMode,
     collectionTitle,
-    handleSelectCollectionItem,
-    selectedCollection,
     animeInCollection,
     currentAnimeItemData,
   } = useAnimeDetailsContext();
@@ -28,16 +26,9 @@ export const ModalContent = () => {
         py="0.5em"
       >
         {animeInCollection.map((collection, i) => {
-          const isSelected = selectedCollection.includes(collection.id);
-          const handleClickCollectionItem = () => {
-            handleSelectCollectionItem({
-              id: collection.id,
-              isSelected,
-            });
-          };
           return (
-            <Center key={i} w="100%" onClick={handleClickCollectionItem}>
-              <CollectionItem {...collection} isSelected={isSelected} />
+            <Center key={i} w="100%">
+              <CollectionItem {...collection} />
             </Center>
           );
         })}

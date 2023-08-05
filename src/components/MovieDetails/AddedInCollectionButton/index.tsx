@@ -4,7 +4,7 @@ import { useAnimeDetailsContext } from "@/context/animeDetails";
 import { ModalContent } from "./Fragments/ModalContent";
 
 export const AddedInCollectionButton = () => {
-  const { animeInCollection } = useAnimeDetailsContext();
+  const { animeData, animeInCollection } = useAnimeDetailsContext();
 
   const { isOpen, onToggle } = useDisclosure();
 
@@ -13,12 +13,11 @@ export const AddedInCollectionButton = () => {
   return (
     <>
       <Button
-        variant="link"
+        variant="solid"
         isDisabled={!isExistInCollections}
-        fontSize="xs"
         onClick={onToggle}
       >
-        This anime is in {animeInCollection.length} collections
+        In collections
       </Button>
       <Modal
         as={Flex}
@@ -29,7 +28,7 @@ export const AddedInCollectionButton = () => {
         }
         isOpen={isOpen}
         onToggle={onToggle}
-        title="Add to collection"
+        title={`${animeData.title?.romaji} in collections`}
         justifyContent={!isExistInCollections ? "initial" : "center"}
       >
         <Flex
