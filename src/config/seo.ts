@@ -5,7 +5,12 @@ export const SEO: DefaultSeoProps = {
   titleTemplate: "%s | Hexalts x AniList",
   defaultTitle: "Hexalts x AniList",
   openGraph: {
-    images: [{ url: "/banner.png", alt: "Hexalts x AniList" }],
+    images: [
+      {
+        url: "https://hexalts-anilist.vercel.app/banner.png",
+        alt: "Hexalts x AniList",
+      },
+    ],
   },
   description:
     "Discover the ultimate watchlist site tailored for avid anime enthusiasts and passionate weebs. Unleash your inner otaku as you explore a curated collection of must-watch series and films. Elevate your anime experience with the best watchlist platform designed to cater to your anime cravings.",

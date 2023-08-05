@@ -1,6 +1,6 @@
 import { Container, Flex, useMediaQuery } from "@chakra-ui/react";
 import { NavigationBar } from "./Fragments/NavigationBar";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ActionBar } from "./Fragments/ActionBar";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -14,8 +14,25 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
   const { pathname } = useRouter();
   const [isLarge] = useMediaQuery("(min-width: 625px)");
 
+  const flexRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const appHeight = () => {
+      if (flexRef.current) {
+        flexRef.current.style.height = `${window.innerHeight}px`;
+      }
+    };
+
+    appHeight();
+    window.addEventListener("resize", appHeight);
+
+    return () => {
+      window.removeEventListener("resize", appHeight);
+    };
+  }, []);
+
   return (
-    <Flex w="100vw" h="100vh" direction="column" bg="black">
+    <Flex w="100vw" h="full" ref={flexRef} direction="column" bg="black">
       <NavigationBar />
       <Flex
         w="full"
