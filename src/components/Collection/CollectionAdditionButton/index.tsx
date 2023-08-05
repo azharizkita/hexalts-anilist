@@ -58,6 +58,7 @@ export const CollectionAdditionButton = () => {
         onClick={onToggle}
         icon={<MdAdd />}
         shadow="md"
+        size="sm"
         colorScheme="blue"
         borderRadius="full"
         aria-label="Remove"

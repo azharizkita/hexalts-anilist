@@ -1,6 +1,7 @@
 import {
   Flex,
   Icon,
+  IconButton,
   Image,
   LinkBox,
   LinkOverlay,
@@ -9,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { MdMovie } from "react-icons/md";
+import { MdMovie, MdRemove } from "react-icons/md";
 
 interface MovieListItemProps {
   imageUrl?: string | null;
@@ -18,6 +19,7 @@ interface MovieListItemProps {
   subtitle?: string;
   id?: string;
   isLoading?: boolean;
+  onClickDelete?: (id: string) => void;
 }
 
 export const MovieItem = ({
@@ -26,6 +28,7 @@ export const MovieItem = ({
   subtitle,
   isLoading = false,
   id,
+  onClickDelete,
 }: MovieListItemProps) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const { push } = useRouter();
@@ -44,6 +47,31 @@ export const MovieItem = ({
       align="center"
       justify="center"
     >
+      <Flex
+        position="absolute"
+        zIndex="1"
+        top="-0.5em"
+        right="-0.5em"
+        gap="0.25em"
+      >
+        {onClickDelete && (
+          <IconButton
+            icon={<MdRemove />}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onClickDelete(id as string);
+            }}
+            borderColor="gray.200"
+            borderWidth="thin"
+            size="xs"
+            shadow="md"
+            colorScheme="red"
+            borderRadius="full"
+            aria-label="Remove"
+          />
+        )}
+      </Flex>
       <Flex
         as={LinkOverlay}
         href={!isLoading ? `/anime/${id}` : undefined}

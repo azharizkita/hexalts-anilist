@@ -1,6 +1,7 @@
 import {
   Modal as ChakraModal,
   ModalBodyProps as ChakraModalBodyProps,
+  ModalProps as ChakraModalProps,
   ModalOverlay,
   ModalContent,
   ModalHeader,
@@ -19,6 +20,7 @@ interface ModalProps extends ChakraModalBodyProps {
   children: React.ReactNode;
   footerContent?: React.ReactNode;
   headerContent?: React.ReactNode;
+  modalProps?: Partial<ChakraModalProps>;
 }
 
 export const Modal = ({
@@ -28,6 +30,7 @@ export const Modal = ({
   onToggle,
   footerContent,
   headerContent,
+  modalProps,
   ...rest
 }: ModalProps) => {
   const [isLarge] = useMediaQuery("(min-width: 625px)");
@@ -39,6 +42,7 @@ export const Modal = ({
       isCentered
       size={isLarge ? "xl" : "full"}
       scrollBehavior="inside"
+      {...modalProps}
     >
       <ModalOverlay />
       <ModalContent>
@@ -50,9 +54,7 @@ export const Modal = ({
         </ModalHeader>
         <ModalCloseButton />
 
-        <ModalBody {...rest}>
-          {children}
-        </ModalBody>
+        <ModalBody {...rest}>{children}</ModalBody>
         <ModalFooter>{footerContent}</ModalFooter>
       </ModalContent>
     </ChakraModal>

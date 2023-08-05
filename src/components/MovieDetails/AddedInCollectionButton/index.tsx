@@ -1,7 +1,6 @@
 import { Button, Flex, useDisclosure } from "@chakra-ui/react";
 import { Modal } from "@/components/base/Modal";
 import { useAnimeDetailsContext } from "@/context/animeDetails";
-import { FooterContent } from "./Fragments/FooterContent";
 import { ModalContent } from "./Fragments/ModalContent";
 
 export const AddedInCollectionButton = () => {
@@ -9,13 +8,13 @@ export const AddedInCollectionButton = () => {
 
   const { isOpen, onToggle } = useDisclosure();
 
-  const isNotExistInCollections = animeInCollection.length === 0;
+  const isExistInCollections = animeInCollection.length !== 0;
 
   return (
     <>
       <Button
         variant="link"
-        isDisabled={isNotExistInCollections}
+        isDisabled={!isExistInCollections}
         fontSize="xs"
         onClick={onToggle}
       >
@@ -23,12 +22,23 @@ export const AddedInCollectionButton = () => {
       </Button>
       <Modal
         as={Flex}
+        footerContent={
+          <Button variant="ghost" mr={3} onClick={onToggle}>
+            Close
+          </Button>
+        }
         isOpen={isOpen}
         onToggle={onToggle}
         title="Add to collection"
-        footerContent={<FooterContent />}
+        justifyContent={!isExistInCollections ? "initial" : "center"}
       >
-        <Flex direction="column" py="1em" h="100%" w="100%">
+        <Flex
+          direction="column"
+          py="1em"
+          h="100%"
+          w="100%"
+          alignSelf={isExistInCollections ? "initial" : "center"}
+        >
           <ModalContent />
         </Flex>
       </Modal>

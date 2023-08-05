@@ -79,6 +79,9 @@ export const CollectionEditModal = () => {
 
   return (
     <Modal
+      modalProps={{
+        size: "xl",
+      }}
       isOpen={Boolean(collectionToBeEdited)}
       onToggle={handleToggleModal}
       title="Edit Collection"

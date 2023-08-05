@@ -24,6 +24,9 @@ export const CollectionDeleteModal = () => {
 
   return (
     <Modal
+      modalProps={{
+        size: "xl",
+      }}
       isOpen={Boolean(collectionToBeDeleted)}
       onToggle={handleToggleModal}
       title="Remove Collection"

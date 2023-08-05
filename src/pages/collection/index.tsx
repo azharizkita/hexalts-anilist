@@ -18,6 +18,7 @@ import { CollectionItem } from "@/components/Collection/CollectionItem";
 import { CollectionEditModal } from "@/components/Collection/CollectionEditModal";
 import { NextSeo } from "next-seo";
 import { MdSentimentDissatisfied } from "react-icons/md";
+import { useRouter } from "next/router";
 
 export interface WatchlistItem {
   id: string;
@@ -26,12 +27,13 @@ export interface WatchlistItem {
 }
 
 const CollectionPage = () => {
-  const { collections } = useCollectionContext();
-
+  const { push } = useRouter();
+  const { collections, setCollectionToBeDeleted, setCollectionToBeEdited } =
+    useCollectionContext();
   return (
     <Flex gap="1em" direction="column" overflow="auto" h="full">
       <Flex direction="column" gap="1em">
-        <Flex justify="space-between" justifyItems="center">
+        <Flex justify="space-between" align="center">
           <Heading>My collection</Heading>
           <CollectionAdditionButton />
         </Flex>
@@ -50,11 +52,27 @@ const CollectionPage = () => {
             overflow="auto"
             py="1em"
           >
-            {collections.map(({ id, title, watchlist }) => (
-              <Center key={id} w="100%">
-                <CollectionItem id={id} title={title} watchlist={watchlist} />
-              </Center>
-            ))}
+            {collections.map(({ id, title, watchlist }) => {
+              return (
+                <Center
+                  key={id}
+                  w="100%"
+                  onClick={() => push(`/collection/${id}`)}
+                >
+                  <CollectionItem
+                    id={id}
+                    title={title}
+                    watchlist={watchlist}
+                    onClickDelete={() =>
+                      setCollectionToBeDeleted({ id, title, watchlist })
+                    }
+                    onClickEdit={() =>
+                      setCollectionToBeEdited({ id, title, watchlist })
+                    }
+                  />
+                </Center>
+              );
+            })}
           </SimpleGrid>
         ) : (
           <Flex
