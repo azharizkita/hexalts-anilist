@@ -22,7 +22,7 @@ export const FooterContent = () => {
     availableCollection,
     selectedCollection,
     collectionTitle,
-    isAddButtonDisabled,
+    isAddButtonDisabled: _isAddButtonDisabled,
     isChecking,
     isError,
     handleChangeMode,
@@ -49,6 +49,10 @@ export const FooterContent = () => {
         every available collection. Consider making a new collection first.
       </>
     );
+
+  const isAddButtonDisabled = isCreateMode
+    ? _isAddButtonDisabled || !isInputValid
+    : _isAddButtonDisabled;
 
   return (
     <Flex direction="column" w="100%" gap="1em">
@@ -84,7 +88,7 @@ export const FooterContent = () => {
         </Button>
         <Button
           colorScheme="blue"
-          isDisabled={isAddButtonDisabled || !isInputValid}
+          isDisabled={isAddButtonDisabled}
           onClick={handleCreateCollectionItem}
         >
           Add

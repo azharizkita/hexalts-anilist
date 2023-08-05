@@ -2,6 +2,14 @@ import { Flex, IconButton, Input, Skeleton, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import debounce from "lodash/debounce";
+import { css } from "@emotion/css";
+
+const iconButtonStyles = css`
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 9999px;
+`;
+
 interface PaginationProps {
   lastPage: number | null;
   page: number;
@@ -45,6 +53,7 @@ export const Pagination = ({
   return (
     <Flex gap="1em" align="center" justify="center">
       <IconButton
+        className={iconButtonStyles}
         isDisabled={page === 1}
         onClick={() => {
           onClickPrev(page - 1);
@@ -52,12 +61,8 @@ export const Pagination = ({
         }}
         aria-label="previous-page"
         icon={<MdArrowBack />}
-        borderColor="gray.200"
-        borderWidth="thin"
         size="xs"
-        shadow="md"
         colorScheme="blue"
-        borderRadius="full"
       />
       <Input
         value={page}
@@ -73,6 +78,7 @@ export const Pagination = ({
         <Text>{isLoading ? lastPage : 100}</Text>
       </Skeleton>
       <IconButton
+        className={iconButtonStyles}
         isDisabled={!isLoading || page === lastPage}
         onClick={() => {
           onClickNext(page + 1);
@@ -80,12 +86,8 @@ export const Pagination = ({
         }}
         aria-label="next-page"
         icon={<MdArrowForward />}
-        borderColor="gray.200"
-        borderWidth="thin"
         size="xs"
-        shadow="md"
         colorScheme="blue"
-        borderRadius="full"
       />
     </Flex>
   );

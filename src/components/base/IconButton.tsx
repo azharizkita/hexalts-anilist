@@ -10,12 +10,21 @@ import type {
   IconButtonProps as ChakraIconButtonProps,
   BadgeProps,
 } from "@chakra-ui/react";
+import { css } from "@emotion/css";
 
 export interface IconButtonProps extends ChakraIconButtonProps {
   wrapperProps?: BoxProps;
   badgeProps?: BadgeProps;
   badgeCount?: number;
 }
+
+const badgeStyles = css`
+  position: absolute;
+  border-radius: full;
+  background-color: red.500;
+  right: -1px;
+  top: -1px;
+`;
 
 export const IconButton = forwardRef<IconButtonProps, "button">(
   ({ wrapperProps, badgeProps, badgeCount = 0, ...rest }, ref) => {
@@ -30,12 +39,8 @@ export const IconButton = forwardRef<IconButtonProps, "button">(
         />
         <Badge
           colorScheme="red"
-          pos="absolute"
           variant="solid"
-          borderRadius="full"
-          bgColor="red.500"
-          right={-1}
-          top={-1}
+          className={badgeStyles}
           {...badgeProps}
         >
           {badgeCount ? badgeCount : null}
