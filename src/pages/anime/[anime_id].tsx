@@ -4,8 +4,10 @@ import {
   Divider,
   Flex,
   Heading,
+  IconButton,
   Image,
   SimpleGrid,
+  Spinner,
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
@@ -16,8 +18,9 @@ import { AnimeDetails } from "@/queries/getAnimeDetails";
 import { AddToCollectionButton } from "@/components/MovieDetails/AddToCollectionButton";
 import { CollectionContextProvider } from "@/context/collection";
 import { AnimeDetailsContextProvider } from "@/context/animeDetails";
-import { EmptyMessage } from "@/components/base/EmptyMessage";
 import { AddedInCollectionButton } from "@/components/MovieDetails/AddedInCollectionButton";
+import { MdArrowBackIosNew } from "react-icons/md";
+import { useEffect } from "react";
 
 const AnimeDetailsPage = (props: AnimeDetails) => {
   const {
@@ -33,13 +36,31 @@ const AnimeDetailsPage = (props: AnimeDetails) => {
     genres,
   } = props;
 
+  const { push } = useRouter();
   const status = _status?.toLowerCase();
   const adultry = isAdult ? "Yes" : "No";
   const [isLarge] = useMediaQuery("(min-width: 625px)");
 
   return (
     <Flex direction="column" overflow="auto" h="100%" w="full" gap="2em">
-      <Flex h="12em" w="full" overflow="hidden" flexShrink={0}>
+      <Flex
+        h="12em"
+        w="full"
+        overflow="hidden"
+        flexShrink={0}
+        position="relative"
+      >
+        <IconButton
+          position="absolute"
+          top="1em"
+          left="1em"
+          onClick={() => push("/anime")}
+          size="sm"
+          icon={<MdArrowBackIosNew />}
+          shadow="md"
+          borderRadius="full"
+          aria-label="Remove"
+        />
         <Image
           objectFit="cover"
           w="full"
@@ -143,17 +164,36 @@ const AnimeDetailsPage = (props: AnimeDetails) => {
 };
 
 export default function AnimeDetail() {
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const { anime_id } = query;
 
   const animeId = anime_id as string;
-  const { data } = useGetAnimeDetails({ id: animeId });
+  const { data, error } = useGetAnimeDetails({ id: animeId });
+
+  useEffect(() => {
+    if (!error) {
+      return;
+    }
+    push("/404");
+  }, [error]);
+
   if (!data) {
     return (
       <>
-        <NextSeo title="Anime Not Found" />
-        <Flex h="full" w="full" direction="column">
-          <EmptyMessage />
+        <Flex
+          h="full"
+          w="full"
+          direction="column"
+          justify="center"
+          align="center"
+        >
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
         </Flex>
       </>
     );

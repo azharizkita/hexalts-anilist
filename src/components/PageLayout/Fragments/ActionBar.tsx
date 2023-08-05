@@ -8,31 +8,23 @@ export const ActionBar = () => {
   const [tabIndex, setTabIndex] = useState(-1);
 
   useEffect(() => {
-    if (pathname === "/collection") {
+    if (
+      pathname === "/collection" ||
+      pathname === "/collection/[collection_id]"
+    ) {
       setTabIndex(1);
       return;
     }
     setTabIndex(0);
   }, [pathname]);
 
-  const handleTabsChange = async (index: number) => {
-    if (index === 0) {
-      await push("/anime");
-    }
-
-    if (index === 1) {
-      await push("/collection");
-    }
-
-    setTabIndex(index);
-  };
   return (
     <Tabs
       isFitted
       position="relative"
       variant="enclosed-colored"
       index={tabIndex}
-      onChange={handleTabsChange}
+      onChange={setTabIndex}
     >
       <TabList bg="gray.100" borderTopWidth="thin">
         <Tab
@@ -41,6 +33,7 @@ export const ActionBar = () => {
           as={Flex}
           flexDirection="column"
           bg="transparent"
+          onClick={() => push("/anime")}
         >
           <Icon boxSize="1.5em" as={MdMovie} />
           <Text fontSize="xs">Anime</Text>
@@ -51,6 +44,7 @@ export const ActionBar = () => {
           as={Flex}
           flexDirection="column"
           bg="transparent"
+          onClick={() => push("/collection")}
         >
           <Icon boxSize="1.5em" as={MdPlaylistPlay} />
           <Text fontSize="xs">My collection</Text>

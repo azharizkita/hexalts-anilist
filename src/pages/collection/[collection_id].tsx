@@ -23,7 +23,7 @@ import {
   MdSentimentDissatisfied,
 } from "react-icons/md";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { MovieItem } from "@/components/Movie/MovieItem";
 
 export interface WatchlistItem {
@@ -48,6 +48,12 @@ const CollectionDetailsPage = () => {
       collections.find((collection) => collection.id === collectionId) ?? null
     );
   }, [collectionId, collections]);
+
+  useEffect(() => {
+    if (!currentCollection && !collectionId) {
+      push("/404");
+    }
+  }, [currentCollection, collectionId]);
 
   return (
     <>

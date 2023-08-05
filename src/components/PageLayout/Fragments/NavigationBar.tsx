@@ -44,7 +44,7 @@ export const NavigationBar = () => {
           push({
             ...(text && { pathname: "/anime" }),
             ...(page && { page }),
-            query: { ...(text && { keyword: text }) },
+            query: { ...query, keyword: text },
           })
         }
       />
