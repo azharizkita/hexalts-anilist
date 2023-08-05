@@ -11,10 +11,11 @@ import { useCollectionContext } from "@/context/collection";
 import { CollectionItem } from "../CollectionItem";
 import { Modal } from "@/components/base/Modal";
 import { InputLabel } from "../../base/InputLabel";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { MdArrowForward } from "react-icons/md";
 import { WatchlistItem } from "@/pages/collection";
+import { validateInput } from "@/utils/inputValidation";
 
 export const CollectionEditModal = () => {
   const {
@@ -71,6 +72,11 @@ export const CollectionEditModal = () => {
     _handleSearchChange(text);
   };
 
+  const { errorMessage: inputErrorMessage, isValid: isInputValid } =
+    useMemo(() => {
+      return validateInput(editedEntry?.title ?? "");
+    }, [editedEntry]);
+
   const isChecking =
     editedEntry?.title !== collectionToBeEdited?.title && isValid === null;
   const isError = isValid !== null && !isValid;
@@ -93,7 +99,7 @@ export const CollectionEditModal = () => {
           <Spacer />
           <Button
             colorScheme="yellow"
-            isDisabled={!isSubmitable}
+            isDisabled={!isSubmitable || !isInputValid}
             onClick={handleEditCollectionEntry}
           >
             Confirm
@@ -107,13 +113,19 @@ export const CollectionEditModal = () => {
           <Icon color="gray.500" fontSize="xl" as={MdArrowForward} />
           <CollectionItem {...editedEntry} previewMode />
         </Flex>
-        <FormControl isInvalid={isError}>
+        <FormControl isInvalid={isError || !isInputValid}>
           <FormLabel>Name</FormLabel>
           <Input
             value={editedEntry?.title}
             onChange={(e) => handleInputChange(e.target.value)}
           />
-          <InputLabel isChecking={isChecking} isError={isError} />
+          <InputLabel
+            isChecking={isChecking}
+            isError={isError}
+            value={editedEntry?.title}
+            isInputValid={isInputValid}
+            inputError={inputErrorMessage}
+          />
         </FormControl>
       </Flex>
     </Modal>

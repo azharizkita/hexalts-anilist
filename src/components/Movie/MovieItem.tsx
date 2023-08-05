@@ -14,7 +14,7 @@ import { MdMovie, MdRemove } from "react-icons/md";
 
 interface MovieListItemProps {
   imageUrl?: string | null;
-  backgroundColor: string;
+  backgroundColor?: string;
   title?: string;
   subtitle?: string;
   id?: string;

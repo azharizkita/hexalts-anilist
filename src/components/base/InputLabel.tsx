@@ -1,11 +1,21 @@
+import { validateInput } from "@/utils/inputValidation";
 import { FormErrorMessage, FormHelperText } from "@chakra-ui/react";
+import { useMemo } from "react";
 
 interface InputLabelProps {
   isChecking: boolean;
   isError: boolean;
+  value?: string;
+  isInputValid: boolean;
+  inputError: string | null;
 }
 
-export const InputLabel = ({ isChecking, isError }: InputLabelProps) => {
+export const InputLabel = ({
+  isChecking,
+  isError,
+  isInputValid,
+  inputError,
+}: InputLabelProps) => {
   if (isChecking) {
     return (
       <FormHelperText>Checking collection name validity...</FormHelperText>
@@ -16,6 +26,10 @@ export const InputLabel = ({ isChecking, isError }: InputLabelProps) => {
     return (
       <FormErrorMessage>Collection name is already exist.</FormErrorMessage>
     );
+  }
+
+  if (!isInputValid) {
+    return <FormErrorMessage>{inputError}</FormErrorMessage>;
   }
 
   return (

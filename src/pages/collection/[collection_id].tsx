@@ -1,4 +1,5 @@
 import {
+  Button,
   Center,
   Divider,
   Flex,
@@ -7,7 +8,9 @@ import {
   IconButton,
   SimpleGrid,
   Spacer,
+  Spinner,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import type { AnimeItem } from "@/queries/getAnimeList";
 import {
@@ -23,8 +26,9 @@ import {
   MdSentimentDissatisfied,
 } from "react-icons/md";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MovieItem } from "@/components/Movie/MovieItem";
+import { Modal } from "@/components/base/Modal";
 
 export interface WatchlistItem {
   id: string;
@@ -34,6 +38,7 @@ export interface WatchlistItem {
 
 const CollectionDetailsPage = () => {
   const { query, push } = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const { collection_id } = query;
   const collectionId = collection_id as string | undefined;
 
@@ -43,6 +48,20 @@ const CollectionDetailsPage = () => {
     removeAnimeItemFromCollection,
   } = useCollectionContext();
 
+  const [animeToBeDeleted, setAnimeToBeDeleted] =
+    useState<Partial<AnimeItem> | null>(null);
+
+  const handleRemoveAnimeItem = () => {
+    if (!animeToBeDeleted) {
+      return;
+    }
+    removeAnimeItemFromCollection(
+      collectionId as string,
+      animeToBeDeleted?.id ?? 0
+    );
+    setAnimeToBeDeleted(null);
+  };
+
   const currentCollection = useMemo(() => {
     return (
       collections.find((collection) => collection.id === collectionId) ?? null
@@ -50,14 +69,73 @@ const CollectionDetailsPage = () => {
   }, [collectionId, collections]);
 
   useEffect(() => {
-    if (!currentCollection && !collectionId) {
-      push("/404");
-    }
+    const checkCollectionExistance = setTimeout(() => {
+      if (!currentCollection && !collectionId) {
+        push("/404");
+      }
+      setIsLoading(false);
+    }, 650);
+    return () => clearTimeout(checkCollectionExistance);
   }, [currentCollection, collectionId]);
+
+  if (isLoading) {
+    return (
+      <Flex
+        h="full"
+        w="full"
+        direction="column"
+        justify="center"
+        align="center"
+      >
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      </Flex>
+    );
+  }
 
   return (
     <>
       <NextSeo title="My collection" />
+      <Modal
+        modalProps={{
+          size: "xl",
+        }}
+        isOpen={Boolean(animeToBeDeleted)}
+        onToggle={() => setAnimeToBeDeleted(null)}
+        title="Remove Anime"
+        footerContent={
+          <>
+            <Button
+              variant="ghost"
+              mr={3}
+              onClick={() => setAnimeToBeDeleted(null)}
+            >
+              Cancel
+            </Button>
+            <Spacer />
+            <Button colorScheme="red" onClick={handleRemoveAnimeItem}>
+              Remove
+            </Button>
+          </>
+        }
+      >
+        <Flex direction="column" gap="1em" align="center">
+          <MovieItem
+            imageUrl={animeToBeDeleted?.coverImage?.extraLarge}
+            subtitle={animeToBeDeleted?.title?.native}
+            title={animeToBeDeleted?.title?.romaji}
+          />
+          <Text textAlign="center">
+            Are you sure want to remove <b>{animeToBeDeleted?.title?.romaji}</b>{" "}
+            from your collection?
+          </Text>
+        </Flex>
+      </Modal>
       <Flex gap="1em" direction="column" overflow="auto" h="full">
         <Flex direction="column" gap="1em">
           <Flex align="center" gap="0.5em">
@@ -107,7 +185,7 @@ const CollectionDetailsPage = () => {
                     if (!id) {
                       return;
                     }
-                    removeAnimeItemFromCollection(currentCollection.id, id);
+                    setAnimeToBeDeleted({ coverImage, title, id });
                   };
                   return (
                     <Center key={i} w="100%">

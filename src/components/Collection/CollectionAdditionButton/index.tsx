@@ -8,10 +8,11 @@ import {
 import { MdAdd } from "react-icons/md";
 import { Modal } from "@/components/base/Modal";
 import { FormControl, FormLabel } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useCollectionContext } from "@/context/collection";
 import debounce from "lodash/debounce";
 import { InputLabel } from "../../base/InputLabel";
+import { validateInput } from "@/utils/inputValidation";
 
 export const CollectionAdditionButton = () => {
   const { collections, addCollectionEntry } = useCollectionContext();
@@ -48,6 +49,11 @@ export const CollectionAdditionButton = () => {
     handleCloseModal();
   };
 
+  const { errorMessage: inputErrorMessage, isValid: isInputValid } =
+    useMemo(() => {
+      return validateInput(input ?? "");
+    }, [input]);
+
   const isChecking = input !== "" && isValid === null;
   const isError = isValid !== null && !isValid;
   const isSubmitable = input !== "" && isValid;
@@ -75,7 +81,7 @@ export const CollectionAdditionButton = () => {
             <Spacer />
             <Button
               colorScheme="blue"
-              isDisabled={!isSubmitable}
+              isDisabled={!isSubmitable || !isInputValid}
               onClick={handleCreateCollectionItem}
             >
               Create
@@ -83,13 +89,19 @@ export const CollectionAdditionButton = () => {
           </>
         }
       >
-        <FormControl isInvalid={isError}>
+        <FormControl isInvalid={isError || !isInputValid}>
           <FormLabel>Name</FormLabel>
           <Input
             value={input}
             onChange={(e) => handleInputChange(e.target.value)}
           />
-          <InputLabel isChecking={isChecking} isError={isError} />
+          <InputLabel
+            isChecking={isChecking}
+            isError={isError}
+            value={input}
+            isInputValid={isInputValid}
+            inputError={inputErrorMessage}
+          />
         </FormControl>
       </Modal>
     </>
