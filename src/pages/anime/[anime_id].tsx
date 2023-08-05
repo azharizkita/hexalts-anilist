@@ -1,6 +1,5 @@
 import {
   Badge,
-  Button,
   Container,
   Divider,
   Flex,
@@ -15,20 +14,25 @@ import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import { useGetAnimeDetails } from "@/hooks/useGetAnimeDetails";
 import { AnimeDetails } from "@/queries/getAnimeDetails";
-import { MdPlaylistPlay } from "react-icons/md";
+import { AddToCollectionButton } from "@/components/MovieDetails/AddToCollectionButton";
+import { CollectionContextProvider } from "@/context/collection";
+import { AnimeDetailsContextProvider } from "@/context/animeDetails";
+import { MdSentimentDissatisfied } from "react-icons/md";
 
-const AnimeDetailsPage = ({
-  title,
-  coverImage,
-  bannerImage,
-  status: _status,
-  episodes,
-  averageScore,
-  duration,
-  isAdult,
-  description,
-  genres,
-}: Partial<AnimeDetails>) => {
+const AnimeDetailsPage = (props: AnimeDetails) => {
+  const {
+    title,
+    coverImage,
+    bannerImage,
+    status: _status,
+    episodes,
+    averageScore,
+    duration,
+    isAdult,
+    description,
+    genres,
+  } = props;
+
   const status = _status?.toLowerCase();
   const adultry = isAdult ? "Yes" : "No";
   const [isLarge] = useMediaQuery("(min-width: 625px)");
@@ -56,7 +60,7 @@ const AnimeDetailsPage = ({
           <Image
             objectFit="cover"
             w="full"
-            src={coverImage?.large}
+            src={coverImage?.extraLarge}
             alt="anime-banner"
           />
         </Flex>
@@ -93,9 +97,7 @@ const AnimeDetailsPage = ({
             Rating
           </Text>
         </Flex>
-        <Button leftIcon={<Icon boxSize="1.5em" as={MdPlaylistPlay} />}>
-          Add to collection
-        </Button>
+        <AddToCollectionButton />
       </Container>
       <Divider />
       <Container maxW="container.xl" as={Flex} flexDirection="column" gap="1em">
@@ -105,7 +107,7 @@ const AnimeDetailsPage = ({
         <Flex
           wrap="wrap"
           gap="0.5em"
-          justify={isLarge ? "start" : "space-evenly"}
+          justify={isLarge ? "start" : "center"}
           w="full"
           fontSize="sm"
         >
@@ -143,11 +145,33 @@ export default function AnimeDetail() {
 
   const animeId = anime_id as string;
   const { data } = useGetAnimeDetails({ id: animeId });
+  if (!data) {
+    return (
+      <>
+        <NextSeo title="Not Found" />
+        <Flex h="full" w="full" direction="column">
+          <Flex
+            align="center"
+            justify="center"
+            h="100%"
+            gap="0.5em"
+            direction="column"
+            color="gray.400"
+          >
+            <Icon fontSize="5xl" as={MdSentimentDissatisfied} />
+            <Text>We found nothing...</Text>
+          </Flex>
+        </Flex>
+      </>
+    );
+  }
   return (
-    <>
-      <NextSeo title={data?.title.romaji} description={data?.description} />
-      <AnimeDetailsPage {...data} />
-    </>
+    <CollectionContextProvider>
+      <AnimeDetailsContextProvider animeData={data}>
+        <NextSeo title={data.title.romaji} description={data.description} />
+        <AnimeDetailsPage {...data} />
+      </AnimeDetailsContextProvider>
+    </CollectionContextProvider>
   );
 }
 

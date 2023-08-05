@@ -11,7 +11,8 @@ export const GET_ANIME_DETAILS = gql`
       }
       description
       coverImage {
-        large
+        extraLarge
+        color
       }
       bannerImage
       episodes
@@ -37,7 +38,8 @@ export interface AnimeDetails {
   };
   description: string;
   coverImage: {
-    large: string;
+    extraLarge: string;
+    color: string;
   };
   bannerImage: string;
   episodes: number;

@@ -5,7 +5,6 @@ import { IconButton } from "@/components/base/IconButton";
 import { Link } from "@chakra-ui/next-js";
 import { SearchInput } from "@/components/base/SearchInput";
 import { useRouter } from "next/router";
-import { useLayoutEffect } from "react";
 
 const NavigationBarWrapper = styled(Flex)`
   align-items: center;
@@ -38,6 +37,9 @@ export const NavigationBar = () => {
       )}
       <SearchInput
         initialValue={keyword as string}
+        inputGroupProps={{
+          maxWidth: isLarge ? "400px" : "initial",
+        }}
         onSearch={(text) =>
           push({
             ...(text && { pathname: "/anime" }),

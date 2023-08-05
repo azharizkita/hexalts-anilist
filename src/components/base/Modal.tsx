@@ -7,8 +7,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Spacer,
-  Button,
+  Flex,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 
@@ -17,7 +17,8 @@ interface ModalProps extends ChakraModalBodyProps {
   isOpen: boolean;
   onToggle: () => void;
   children: React.ReactNode;
-  footerContent: React.ReactNode;
+  footerContent?: React.ReactNode;
+  headerContent?: React.ReactNode;
 }
 
 export const Modal = ({
@@ -26,15 +27,32 @@ export const Modal = ({
   isOpen,
   onToggle,
   footerContent,
+  headerContent,
   ...rest
 }: ModalProps) => {
+  const [isLarge] = useMediaQuery("(min-width: 625px)");
+
   return (
-    <ChakraModal isOpen={isOpen} onClose={onToggle} isCentered>
+    <ChakraModal
+      isOpen={isOpen}
+      onClose={onToggle}
+      isCentered
+      size={isLarge ? "xl" : "full"}
+      scrollBehavior="inside"
+    >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
+        <ModalHeader>
+          <Flex gap="0.5em" direction="column" w="100%">
+            {title}
+            {headerContent}
+          </Flex>
+        </ModalHeader>
         <ModalCloseButton />
-        <ModalBody {...rest}>{children}</ModalBody>
+
+        <ModalBody {...rest}>
+          {children}
+        </ModalBody>
         <ModalFooter>{footerContent}</ModalFooter>
       </ModalContent>
     </ChakraModal>

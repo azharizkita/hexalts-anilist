@@ -22,8 +22,7 @@ import { MdSentimentDissatisfied } from "react-icons/md";
 export interface WatchlistItem {
   id: string;
   title: string;
-  imageUrl: string | null;
-  watchlist: AnimeItem[];
+  watchlist: Partial<AnimeItem>[];
 }
 
 const CollectionPage = () => {
@@ -51,14 +50,9 @@ const CollectionPage = () => {
             overflow="auto"
             py="1em"
           >
-            {collections.map(({ id, title, imageUrl, watchlist }) => (
+            {collections.map(({ id, title, watchlist }) => (
               <Center key={id} w="100%">
-                <CollectionItem
-                  id={id}
-                  imageUrl={imageUrl}
-                  title={title}
-                  watchlist={watchlist}
-                />
+                <CollectionItem id={id} title={title} watchlist={watchlist} />
               </Center>
             ))}
           </SimpleGrid>

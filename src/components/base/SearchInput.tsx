@@ -4,6 +4,7 @@ import {
   IconButton,
   Input,
   InputGroup,
+  InputGroupProps,
   InputLeftElement,
   InputProps,
   InputRightElement,
@@ -14,11 +15,15 @@ import debounce from "lodash/debounce";
 
 interface SearchInputProps extends InputProps {
   onSearch?: (text: string) => void;
-  initialValue: string;
+  initialValue?: string;
+  inputGroupProps?: InputGroupProps;
 }
 
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
-  ({ onSearch = () => {}, initialValue = "", ...rest }, ref) => {
+  (
+    { onSearch = () => {}, initialValue = "", inputGroupProps, ...rest },
+    ref
+  ) => {
     const [isLarge] = useMediaQuery("(min-width: 625px)");
     const [searchText, setSearchText] = useState<string | undefined>();
 
@@ -43,8 +48,8 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     return (
       <InputGroup
         size={isLarge ? "sm" : "md"}
-        maxWidth={isLarge ? "400px" : "initial"}
         color="white"
+        {...inputGroupProps}
       >
         <InputLeftElement
           pointerEvents="none"

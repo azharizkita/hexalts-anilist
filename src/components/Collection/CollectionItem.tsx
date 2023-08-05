@@ -4,31 +4,31 @@ import { Flex, Icon, IconButton, Image, Text } from "@chakra-ui/react";
 import { MdEdit, MdPlaylistPlay, MdRemove } from "react-icons/md";
 
 interface PlaylistItemProps {
-  imageUrl?: string | null;
   title?: string;
   id?: string;
-  watchlist?: AnimeItem[];
+  watchlist?: Partial<AnimeItem>[];
   previewMode?: boolean;
+  isSelected?: boolean;
 }
 
 export const CollectionItem = ({
-  imageUrl,
   title,
   id,
   watchlist = [],
   previewMode = false,
+  isSelected = false,
 }: PlaylistItemProps) => {
   const { setCollectionToBeDeleted, setCollectionToBeEdited } =
     useCollectionContext();
   return (
-    <Flex direction="column" w="145px" gap="0.15em" position="relative">
+    <Flex direction="column" w="145px" gap="0.15em" position="relative" py="0.25em">
       {!previewMode && (
         <Flex position="absolute" top="-0.5em" right="-0.5em" gap="0.25em">
           <IconButton
             icon={<MdEdit />}
             onClick={() => {
-              if (id && title && typeof imageUrl !== "undefined") {
-                setCollectionToBeEdited({ id, title, imageUrl, watchlist });
+              if (id && title) {
+                setCollectionToBeEdited({ id, title, watchlist });
               }
             }}
             borderColor="gray.200"
@@ -41,8 +41,8 @@ export const CollectionItem = ({
           <IconButton
             icon={<MdRemove />}
             onClick={() => {
-              if (id && title && typeof imageUrl !== "undefined") {
-                setCollectionToBeDeleted({ id, title, imageUrl, watchlist });
+              if (id && title) {
+                setCollectionToBeDeleted({ id, title, watchlist });
               }
             }}
             borderColor="gray.200"
@@ -62,12 +62,12 @@ export const CollectionItem = ({
         h="100%"
         borderRadius="2xl"
         bg="gray.100"
-        shadow="md"
-        borderColor="gray.300"
-        borderWidth="thin"
+        shadow={isSelected ? "xl" : "md"}
+        outline="4px solid"
+        outlineColor={isSelected ? "blue.400" : "transparent"}
       >
-        {imageUrl ? (
-          <Image alt="anime" src={imageUrl} />
+        {watchlist.length ? (
+          <Image alt="anime" src={watchlist[0].coverImage?.extraLarge} />
         ) : (
           <Flex
             bg="gray.200"

@@ -10,7 +10,7 @@ import {
 import { useCollectionContext } from "@/context/collection";
 import { CollectionItem } from "../CollectionItem";
 import { Modal } from "@/components/base/Modal";
-import { InputLabel } from "../Fragments/InputLabel";
+import { InputLabel } from "../../base/InputLabel";
 import { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
 import { MdArrowForward } from "react-icons/md";

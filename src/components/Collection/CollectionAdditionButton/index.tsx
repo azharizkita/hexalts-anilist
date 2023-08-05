@@ -11,7 +11,7 @@ import { FormControl, FormLabel } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 import { useCollectionContext } from "@/context/collection";
 import debounce from "lodash/debounce";
-import { InputLabel } from "../Fragments/InputLabel";
+import { InputLabel } from "../../base/InputLabel";
 
 export const CollectionAdditionButton = () => {
   const { collections, addCollectionEntry } = useCollectionContext();
