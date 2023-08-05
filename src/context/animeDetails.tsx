@@ -14,6 +14,8 @@ import { WatchlistItem } from "@/pages/collection";
 import debounce from "lodash/debounce";
 
 interface AnimeDetailsContextType {
+  availableCollection: WatchlistItem[];
+  animeInCollection: WatchlistItem[];
   currentAnimeItemData: Partial<AnimeItem>;
   animeData: Partial<AnimeDetails>;
   isChecking: boolean;
@@ -67,6 +69,7 @@ const useCollection = (animeData: AnimeDetails) => {
     // only reset modal states if we are opening the modal
     // to avoid animation issue
     if (!isOpenCollectionModal) {
+      setIsCreateMode(false);
       resetModalState();
     }
     onToggle();
@@ -137,17 +140,31 @@ const useCollection = (animeData: AnimeDetails) => {
     ? !isSubmitable
     : !selectedCollection.length;
 
-  const filteredCollection = useMemo(() => {
+  const availableCollection = useMemo(() => {
     return collections.filter((collection) =>
+      collection.watchlist.every((watchitem) => watchitem.id !== animeData.id)
+    );
+  }, [collections, animeData]);
+
+  const animeInCollection = useMemo(() => {
+    return collections.filter((collection) =>
+      collection.watchlist.some((watchitem) => watchitem.id === animeData.id)
+    );
+  }, [collections, animeData]);
+
+  const filteredCollection = useMemo(() => {
+    return availableCollection.filter((collection) =>
       collection.title.includes(searchValue)
     );
-  }, [collections, searchValue]);
+  }, [searchValue, animeData, availableCollection, collections]);
 
   useEffect(() => {
     setCollectionTitle(`Collection ${collections.length}`);
   }, [collections, isCreateMode]);
 
   return {
+    availableCollection,
+    animeInCollection,
     currentAnimeItemData,
     animeData,
     isChecking,
@@ -169,6 +186,8 @@ const useCollection = (animeData: AnimeDetails) => {
 };
 
 const AnimeDetailsContext = createContext<AnimeDetailsContextType>({
+  availableCollection: [],
+  animeInCollection: [],
   currentAnimeItemData: {},
   animeData: {},
   isChecking: false,

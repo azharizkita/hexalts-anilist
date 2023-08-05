@@ -1,6 +1,7 @@
 import { CollectionItem } from "@/components/Collection/CollectionItem";
 import { EmptyMessage } from "@/components/base/EmptyMessage";
 import { useAnimeDetailsContext } from "@/context/animeDetails";
+import { useCollectionContext } from "@/context/collection";
 import { Center, Flex, SimpleGrid } from "@chakra-ui/react";
 
 export const ModalContent = () => {
@@ -12,6 +13,10 @@ export const ModalContent = () => {
     filteredCollection,
     currentAnimeItemData,
   } = useAnimeDetailsContext();
+  const { collections } = useCollectionContext();
+
+  const isCollectionExist = collections.length !== 0;
+
   if (!isCreateMode && filteredCollection.length !== 0) {
     return (
       <SimpleGrid w="full" columns={[2, 3, 3, 3]} spacing="1em" overflow="auto">
@@ -38,7 +43,10 @@ export const ModalContent = () => {
   }
 
   if (!isCreateMode && filteredCollection.length === 0) {
-    return <EmptyMessage />;
+    const emptyMessage = !isCollectionExist
+      ? "You have no collection yet..."
+      : undefined;
+    return <EmptyMessage message={emptyMessage} />;
   }
 
   if (isCreateMode) {

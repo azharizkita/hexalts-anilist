@@ -17,6 +17,7 @@ import { AddToCollectionButton } from "@/components/MovieDetails/AddToCollection
 import { CollectionContextProvider } from "@/context/collection";
 import { AnimeDetailsContextProvider } from "@/context/animeDetails";
 import { EmptyMessage } from "@/components/base/EmptyMessage";
+import { AddedInCollectionButton } from "@/components/MovieDetails/AddedInCollectionButton";
 
 const AnimeDetailsPage = (props: AnimeDetails) => {
   const {
@@ -96,7 +97,10 @@ const AnimeDetailsPage = (props: AnimeDetails) => {
             Rating
           </Text>
         </Flex>
-        <AddToCollectionButton />
+        <Flex direction="column" gap="0.5em">
+          <AddToCollectionButton />
+          <AddedInCollectionButton />
+        </Flex>
       </Container>
       <Divider />
       <Container maxW="container.xl" as={Flex} flexDirection="column" gap="1em">

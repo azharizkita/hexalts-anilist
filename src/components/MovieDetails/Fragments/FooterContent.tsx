@@ -1,5 +1,6 @@
 import { InputLabel } from "@/components/base/InputLabel";
 import { useAnimeDetailsContext } from "@/context/animeDetails";
+import { useCollectionContext } from "@/context/collection";
 import {
   Button,
   Flex,
@@ -16,6 +17,7 @@ export const FooterContent = () => {
     isCreateMode,
     onToggleCollectionModal,
     handleInputChange,
+    availableCollection,
     selectedCollection,
     collectionTitle,
     isAddButtonDisabled,
@@ -24,10 +26,26 @@ export const FooterContent = () => {
     handleChangeMode,
     handleCreateCollectionItem,
   } = useAnimeDetailsContext();
+  const { collections } = useCollectionContext();
+
+  const isCollectionExist = collections.length !== 0;
+
+  const footerMessage =
+    !isCreateMode && isCollectionExist && availableCollection.length !== 0 ? (
+      <>
+        Adding &quot;{animeData.title?.romaji}&quot; into{" "}
+        {selectedCollection.length} collections
+      </>
+    ) : (
+      <>
+        Seems like &quot;{animeData.title?.romaji}&quot; has been added into
+        every available collection. Consider making a new collection first.
+      </>
+    );
 
   return (
     <Flex direction="column" w="100%" gap="1em">
-      {isCreateMode ? (
+      {isCreateMode && (
         <FormControl isInvalid={isError}>
           <FormLabel>Name</FormLabel>
           <Input
@@ -37,10 +55,10 @@ export const FooterContent = () => {
           />
           <InputLabel isChecking={isChecking} isError={isError} />
         </FormControl>
-      ) : (
+      )}
+      {!isCreateMode && isCollectionExist && (
         <Text fontSize="sm" color="gray.500">
-          Adding &quot;{animeData.title?.romaji}&quot; into{" "}
-          {selectedCollection.length} collections
+          {footerMessage}
         </Text>
       )}
       <Flex gap="0.5em">

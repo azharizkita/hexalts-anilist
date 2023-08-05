@@ -1,31 +1,36 @@
 import { Button, Flex, Icon } from "@chakra-ui/react";
-import { MdPlaylistPlay } from "react-icons/md";
+import { MdPlaylistAdd } from "react-icons/md";
 import { Modal } from "@/components/base/Modal";
 import { SearchInput } from "../base/SearchInput";
 import { useAnimeDetailsContext } from "@/context/animeDetails";
 import { FooterContent } from "./Fragments/FooterContent";
 import { ModalContent } from "./Fragments/ModalContent";
+import { useCollectionContext } from "@/context/collection";
 
 export const AddToCollectionButton = () => {
   const {
     isCreateMode,
     onToggleCollectionModal,
     setSearchValue,
-    filteredCollection,
     isOpenCollectionModal,
   } = useAnimeDetailsContext();
+
+  const { collections } = useCollectionContext();
+
+  const isCollectionExist = collections.length !== 0;
 
   return (
     <>
       <Button
         onClick={onToggleCollectionModal}
-        leftIcon={<Icon boxSize="1.5em" as={MdPlaylistPlay} />}
+        leftIcon={<Icon boxSize="1.5em" as={MdPlaylistAdd} />}
       >
         Add to collection
       </Button>
       <Modal
         headerContent={
-          !isCreateMode && (
+          !isCreateMode &&
+          isCollectionExist && (
             <SearchInput
               onSearch={setSearchValue}
               color="black"
@@ -34,7 +39,6 @@ export const AddToCollectionButton = () => {
           )
         }
         as={Flex}
-        alignItems={filteredCollection.length === 0 ? "center" : "initial"}
         isOpen={isOpenCollectionModal}
         onToggle={onToggleCollectionModal}
         title="Add to collection"
