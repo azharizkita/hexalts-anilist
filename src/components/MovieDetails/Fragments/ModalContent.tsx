@@ -1,7 +1,7 @@
 import { CollectionItem } from "@/components/Collection/CollectionItem";
+import { EmptyMessage } from "@/components/base/EmptyMessage";
 import { useAnimeDetailsContext } from "@/context/animeDetails";
-import { Center, Flex, Icon, SimpleGrid, Text } from "@chakra-ui/react";
-import { MdSentimentDissatisfied } from "react-icons/md";
+import { Center, Flex, SimpleGrid } from "@chakra-ui/react";
 
 export const ModalContent = () => {
   const {
@@ -38,19 +38,7 @@ export const ModalContent = () => {
   }
 
   if (!isCreateMode && filteredCollection.length === 0) {
-    return (
-      <Flex
-        align="center"
-        justify="center"
-        h="100%"
-        gap="0.5em"
-        direction="column"
-        color="gray.400"
-      >
-        <Icon fontSize="5xl" as={MdSentimentDissatisfied} />
-        <Text>We found nothing...</Text>
-      </Flex>
-    );
+    return <EmptyMessage />;
   }
 
   if (isCreateMode) {

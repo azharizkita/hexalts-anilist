@@ -3,18 +3,16 @@ import {
   Divider,
   Flex,
   Heading,
-  Icon,
   SimpleGrid,
   Spacer,
-  Text,
 } from "@chakra-ui/react";
 import type { AnimeItem } from "@/queries/getAnimeList";
 import { MovieItem } from "@/components/Movie/MovieItem";
 import { useGetAnimeList } from "@/hooks/useGetAnimeList";
 import { useRouter } from "next/router";
 import { Pagination } from "@/components/base/Pagination";
-import { MdSentimentDissatisfied } from "react-icons/md";
 import { NextSeo } from "next-seo";
+import { EmptyMessage } from "@/components/base/EmptyMessage";
 export interface WatchlistItem {
   id: string;
   title: string;
@@ -95,17 +93,7 @@ const AnimePage = () => {
             ))}
           </SimpleGrid>
         ) : (
-          <Flex
-            align="center"
-            justify="center"
-            h="100%"
-            gap="0.5em"
-            direction="column"
-            color="gray.400"
-          >
-            <Icon fontSize="5xl" as={MdSentimentDissatisfied} />
-            <Text>We found nothing...</Text>
-          </Flex>
+          <EmptyMessage />
         )}
         <Spacer />
         <Divider />

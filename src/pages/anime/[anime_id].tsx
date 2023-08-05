@@ -4,7 +4,6 @@ import {
   Divider,
   Flex,
   Heading,
-  Icon,
   Image,
   SimpleGrid,
   Text,
@@ -17,7 +16,7 @@ import { AnimeDetails } from "@/queries/getAnimeDetails";
 import { AddToCollectionButton } from "@/components/MovieDetails/AddToCollectionButton";
 import { CollectionContextProvider } from "@/context/collection";
 import { AnimeDetailsContextProvider } from "@/context/animeDetails";
-import { MdSentimentDissatisfied } from "react-icons/md";
+import { EmptyMessage } from "@/components/base/EmptyMessage";
 
 const AnimeDetailsPage = (props: AnimeDetails) => {
   const {
@@ -148,19 +147,9 @@ export default function AnimeDetail() {
   if (!data) {
     return (
       <>
-        <NextSeo title="Not Found" />
+        <NextSeo title="Anime Not Found" />
         <Flex h="full" w="full" direction="column">
-          <Flex
-            align="center"
-            justify="center"
-            h="100%"
-            gap="0.5em"
-            direction="column"
-            color="gray.400"
-          >
-            <Icon fontSize="5xl" as={MdSentimentDissatisfied} />
-            <Text>We found nothing...</Text>
-          </Flex>
+          <EmptyMessage />
         </Flex>
       </>
     );
