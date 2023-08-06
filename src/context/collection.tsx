@@ -8,7 +8,7 @@ interface CollectionContextType {
   collectionToBeEdited: WatchlistItem | null;
   addToCollectionWatchlist: (
     collectionId: string[],
-    animeItem: AnimeItem
+    animeItem: AnimeItem | AnimeItem[]
   ) => void;
   removeAnimeItemFromCollection: (
     collectionId: string,
@@ -77,7 +77,7 @@ const useCollection = () => {
 
   const addToCollectionWatchlist = (
     collectionIds: string[],
-    animeItem: AnimeItem
+    animeItem: AnimeItem | AnimeItem[]
   ) => {
     const existingData = getLocalStorageData<WatchlistItem[] | null>(
       "collections"
@@ -88,7 +88,8 @@ const useCollection = () => {
 
     const updatedData = existingData.map((collection) => {
       if (collectionIds.includes(collection.id)) {
-        const updatedWatchlist = [...collection.watchlist, animeItem];
+        const newItems = Array.isArray(animeItem) ? animeItem : [animeItem];
+        const updatedWatchlist = [...collection.watchlist, ...newItems];
         return { ...collection, watchlist: updatedWatchlist };
       }
       return collection;

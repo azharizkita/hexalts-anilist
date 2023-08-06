@@ -13,6 +13,8 @@ import { useState } from "react";
 import { MdMovie, MdRemove } from "react-icons/md";
 
 interface MovieListItemProps {
+  previewMode?: boolean;
+  isSelected?: boolean;
   imageUrl?: string | null;
   backgroundColor?: string;
   title?: string;
@@ -23,6 +25,8 @@ interface MovieListItemProps {
 }
 
 export const MovieItem = ({
+  previewMode,
+  isSelected,
   imageUrl,
   title,
   subtitle,
@@ -36,6 +40,9 @@ export const MovieItem = ({
     <Flex
       as={LinkBox}
       onClick={(e) => {
+        if (previewMode) {
+          return;
+        }
         e.preventDefault();
         e.stopPropagation();
         push(`/anime/${id}`);
@@ -73,8 +80,7 @@ export const MovieItem = ({
         )}
       </Flex>
       <Flex
-        as={LinkOverlay}
-        href={!isLoading ? `/anime/${id}` : undefined}
+        {...(!previewMode && { as: LinkOverlay, href: `/anime/${id}` })}
         h="205px"
         w="145px"
         direction="column"
@@ -85,8 +91,8 @@ export const MovieItem = ({
           overflow="hidden"
           borderRadius="2xl"
           shadow="md"
-          borderColor="gray.300"
-          borderWidth="thin"
+          outline="4px solid"
+          outlineColor={isSelected ? "blue.400" : "transparent"}
         >
           <Skeleton
             isLoaded={!isLoading && isImageLoaded}

@@ -139,9 +139,13 @@ const useCollection = (animeData: AnimeDetails) => {
     : !selectedCollection.length;
 
   const availableCollection = useMemo(() => {
-    return collections.filter((collection) =>
-      collection.watchlist.every((watchitem) => watchitem.id !== animeData.id)
-    );
+    return collections.filter((collection) => {
+      // in case only unique anime can be added into the collection
+      // return collection.watchlist.every(
+      //   (watchitem) => watchitem.id !== animeData.id
+      // );
+      return collection;
+    });
   }, [collections, animeData]);
 
   const animeInCollection = useMemo(() => {

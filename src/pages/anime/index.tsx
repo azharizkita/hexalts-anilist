@@ -13,6 +13,9 @@ import { Pagination } from "@/components/base/Pagination";
 import { NextSeo } from "next-seo";
 import { EmptyMessage } from "@/components/base/EmptyMessage";
 import type { AnimeItem } from "@/types";
+import { CollectionContextProvider } from "@/context/collection";
+import { AddToCollectionButton } from "@/components/Movie/AddToCollectionButton";
+import { AnimeContextProvider, useAnimeContext } from "@/context/anime";
 
 const sampleAnimeItem: AnimeItem = {
   id: 1,
@@ -21,10 +24,10 @@ const sampleAnimeItem: AnimeItem = {
     english: "Sample Anime",
     native: "Sample Anime",
   },
-  bannerImage: "sample_banner_image_url",
+  bannerImage: "",
   coverImage: {
     color: "gray",
-    extraLarge: "sample_cover_image_url",
+    extraLarge: "",
   },
 };
 
@@ -34,6 +37,7 @@ const AnimePage = () => {
   const { query, push } = useRouter();
   const { keyword = "", page: _page = 1 } = query;
   const page = Number(_page);
+  const { isAddMode, selectedAnime, setSelectedAnime } = useAnimeContext();
 
   const { data, paginationMeta, loading } = useGetAnimeList({
     offset: page,
@@ -57,6 +61,7 @@ const AnimePage = () => {
       <Flex direction="column" gap="1em">
         <Flex justify="space-between" justifyItems="center">
           <Heading>Anime</Heading>
+          <AddToCollectionButton />
         </Flex>
         <Divider />
       </Flex>
@@ -73,18 +78,32 @@ const AnimePage = () => {
             overflow="auto"
             py="1em"
           >
-            {_movieItems.map(({ id, title, coverImage }, i) => (
-              <Center key={i} w="100%">
-                <MovieItem
-                  id={id.toString()}
-                  imageUrl={coverImage.extraLarge}
-                  backgroundColor={coverImage.color}
-                  subtitle={title.native}
-                  title={title.romaji}
-                  isLoading={loading}
-                />
-              </Center>
-            ))}
+            {_movieItems.map((anime, i) => {
+              const { id, title, coverImage } = anime;
+              const isSelected = selectedAnime.some((anime) => anime.id === id);
+              const handleClickAnime = () => {
+                setSelectedAnime((state) => {
+                  if (isSelected) {
+                    return state.filter((anime) => anime.id !== id);
+                  }
+                  return [...state, anime];
+                });
+              };
+              return (
+                <Center key={i} w="100%" onClick={handleClickAnime}>
+                  <MovieItem
+                    isSelected={isSelected}
+                    previewMode={isAddMode}
+                    id={id.toString()}
+                    imageUrl={coverImage.extraLarge}
+                    backgroundColor={coverImage.color}
+                    subtitle={title.native}
+                    title={title.romaji}
+                    isLoading={loading}
+                  />
+                </Center>
+              );
+            })}
           </SimpleGrid>
         ) : (
           <EmptyMessage />
@@ -105,11 +124,13 @@ const AnimePage = () => {
   );
 };
 
-export default function Collection() {
+export default function Anime() {
   return (
-    <>
-      <NextSeo title="Anime" />
-      <AnimePage />
-    </>
+    <CollectionContextProvider>
+      <AnimeContextProvider>
+        <NextSeo title="Anime" />
+        <AnimePage />
+      </AnimeContextProvider>
+    </CollectionContextProvider>
   );
 }
