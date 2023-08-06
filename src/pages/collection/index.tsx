@@ -7,7 +7,6 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import type { AnimeItem } from "@/queries/getAnimeList";
 import { CollectionAdditionButton } from "@/components/Collection/CollectionAdditionButton";
 import {
   CollectionContextProvider,
@@ -19,12 +18,6 @@ import { CollectionEditModal } from "@/components/Collection/CollectionEditModal
 import { NextSeo } from "next-seo";
 import { MdSentimentDissatisfied } from "react-icons/md";
 import { useRouter } from "next/router";
-
-export interface WatchlistItem {
-  id: string;
-  title: string;
-  watchlist: Partial<AnimeItem>[];
-}
 
 const CollectionPage = () => {
   const { push } = useRouter();

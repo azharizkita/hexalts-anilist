@@ -10,9 +10,7 @@ import {
   Spacer,
   Spinner,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
-import type { AnimeItem } from "@/queries/getAnimeList";
 import {
   CollectionContextProvider,
   useCollectionContext,
@@ -29,12 +27,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { MovieItem } from "@/components/Movie/MovieItem";
 import { Modal } from "@/components/base/Modal";
-
-export interface WatchlistItem {
-  id: string;
-  title: string;
-  watchlist: Partial<AnimeItem>[];
-}
+import type { AnimeItem, WatchlistItem } from "@/types";
 
 const CollectionDetailsPage = () => {
   const { query, push } = useRouter();
@@ -62,7 +55,7 @@ const CollectionDetailsPage = () => {
     setAnimeToBeDeleted(null);
   };
 
-  const currentCollection = useMemo(() => {
+  const currentCollection = useMemo<WatchlistItem | null>(() => {
     return (
       collections.find((collection) => collection.id === collectionId) ?? null
     );

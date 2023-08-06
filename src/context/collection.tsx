@@ -1,5 +1,4 @@
-import { WatchlistItem } from "@/pages/collection";
-import { AnimeItem } from "@/queries/getAnimeList";
+import { AnimeItem, WatchlistItem } from "@/types";
 import { getLocalStorageData, setLocalStorageData } from "@/utils/localStorage";
 import React, { ReactNode, createContext, useEffect, useState } from "react";
 

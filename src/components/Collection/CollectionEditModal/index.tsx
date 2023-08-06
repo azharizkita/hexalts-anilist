@@ -14,8 +14,8 @@ import { InputLabel } from "../../base/InputLabel";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { MdArrowForward } from "react-icons/md";
-import { WatchlistItem } from "@/pages/collection";
 import { validateInput } from "@/utils/inputValidation";
+import { WatchlistItem } from "@/types";
 
 export const CollectionEditModal = () => {
   const {

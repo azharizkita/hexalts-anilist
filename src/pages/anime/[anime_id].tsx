@@ -14,13 +14,13 @@ import {
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import { useGetAnimeDetails } from "@/hooks/useGetAnimeDetails";
-import { AnimeDetails } from "@/queries/getAnimeDetails";
 import { AddToCollectionButton } from "@/components/MovieDetails/AddToCollectionButton";
 import { CollectionContextProvider } from "@/context/collection";
 import { AnimeDetailsContextProvider } from "@/context/animeDetails";
 import { AddedInCollectionButton } from "@/components/MovieDetails/AddedInCollectionButton";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { useEffect } from "react";
+import { AnimeDetails } from "@/types";
 
 const AnimeDetailsPage = (props: AnimeDetails) => {
   const {

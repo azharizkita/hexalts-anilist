@@ -1,4 +1,3 @@
-import { AnimeItem } from "@/queries/getAnimeList";
 import React, {
   ReactNode,
   createContext,
@@ -9,9 +8,8 @@ import React, {
 } from "react";
 import { useCollectionContext } from "./collection";
 import { useDisclosure } from "@chakra-ui/react";
-import { AnimeDetails } from "@/queries/getAnimeDetails";
-import { WatchlistItem } from "@/pages/collection";
 import debounce from "lodash/debounce";
+import type { AnimeDetails, AnimeItem, WatchlistItem } from "@/types";
 
 interface AnimeDetailsContextType {
   availableCollection: WatchlistItem[];
@@ -153,9 +151,10 @@ const useCollection = (animeData: AnimeDetails) => {
   }, [collections, animeData]);
 
   const filteredCollection = useMemo(() => {
-    return availableCollection.filter((collection) =>
-      collection.title.includes(searchValue)
-    );
+    return availableCollection.filter((collection) => {
+      const parsedCollectionTitile = collection.title.toLowerCase();
+      return parsedCollectionTitile.includes(searchValue);
+    });
   }, [searchValue, animeData, availableCollection, collections]);
 
   useEffect(() => {

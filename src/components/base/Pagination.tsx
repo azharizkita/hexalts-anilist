@@ -1,5 +1,5 @@
 import { Flex, IconButton, Input, Skeleton, Text } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import debounce from "lodash/debounce";
 import { css } from "@emotion/css";
@@ -26,7 +26,7 @@ export const Pagination = ({
   onManualPageChange = () => {},
 }: Partial<PaginationProps>) => {
   const [lastPage, setLastPage] = useState<number | null>(null);
-  const [page, setPage] = useState<number>(_page);
+  const [page, setPage] = useState<number | undefined>(_page);
   const isLoading = lastPage !== null;
 
   const _handleSearchChange = useCallback(
@@ -35,7 +35,6 @@ export const Pagination = ({
   );
 
   const handleSearchChange = (page: number) => {
-    setPage(page);
     _handleSearchChange(page);
   };
 
@@ -50,15 +49,52 @@ export const Pagination = ({
     setPage(_page);
   }, [_page]);
 
+  const isPreviousPageDisabled =
+    typeof page === "undefined" ? _page === 1 : page === 1;
+
+  const isNextPageDisabled =
+    typeof page === "undefined" ? _page === lastPage : page === lastPage;
+
+  const handleClickPreviousPage = () => {
+    if (typeof page === "undefined") {
+      const previousPage = _page - 1;
+      onClickPrev(previousPage);
+      setPage(previousPage);
+      return;
+    }
+    const previousPage = page - 1;
+    onClickPrev(previousPage);
+    setPage(previousPage);
+  };
+
+  const handleClickNextPage = () => {
+    if (typeof page === "undefined") {
+      const nextPage = _page + 1;
+      onClickPrev(nextPage);
+      setPage(nextPage);
+      return;
+    }
+    const nextPage = page + 1;
+    onClickPrev(nextPage);
+    setPage(nextPage);
+  };
+
+  const hangleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === "") {
+      setPage(undefined);
+      return;
+    }
+    const currentPage = Number(value);
+    setPage(currentPage);
+    handleSearchChange(currentPage);
+  };
   return (
     <Flex gap="1em" align="center" justify="center">
       <IconButton
         className={iconButtonStyles}
-        isDisabled={page === 1}
-        onClick={() => {
-          onClickPrev(page - 1);
-          setPage(page - 1);
-        }}
+        isDisabled={isPreviousPageDisabled}
+        onClick={handleClickPreviousPage}
         aria-label="previous-page"
         icon={<MdArrowBack />}
         size="xs"
@@ -66,7 +102,7 @@ export const Pagination = ({
       />
       <Input
         value={page}
-        onChange={(e) => handleSearchChange(Number(e.target.value))}
+        onChange={hangleInputChange}
         type="number"
         width="fit-content"
         size="xs"
@@ -79,11 +115,8 @@ export const Pagination = ({
       </Skeleton>
       <IconButton
         className={iconButtonStyles}
-        isDisabled={!isLoading || page === lastPage}
-        onClick={() => {
-          onClickNext(page + 1);
-          setPage(page + 1);
-        }}
+        isDisabled={!isLoading || isNextPageDisabled}
+        onClick={handleClickNextPage}
         aria-label="next-page"
         icon={<MdArrowForward />}
         size="xs"

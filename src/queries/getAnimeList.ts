@@ -1,3 +1,4 @@
+import { AnimeItem } from "@/types";
 import { gql } from "@apollo/client";
 
 export const GET_ANIME_LIST = gql`
@@ -53,20 +54,6 @@ export type PageInfo = {
   perPage: number;
   lastPage: number;
   hasNextPage: boolean;
-};
-
-export type AnimeItem = {
-  id: number;
-  title: {
-    romaji: string;
-    english: string;
-    native: string;
-  };
-  bannerImage: string;
-  coverImage: {
-    extraLarge: string;
-    color: string;
-  };
 };
 
 export interface AnimeListData {

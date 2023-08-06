@@ -5,18 +5,19 @@ import { SearchInput } from "../../base/SearchInput";
 import { useAnimeDetailsContext } from "@/context/animeDetails";
 import { FooterContent } from "./Fragments/FooterContent";
 import { ModalContent } from "./Fragments/ModalContent";
-import { useCollectionContext } from "@/context/collection";
 
 export const AddToCollectionButton = () => {
   const {
     availableCollection,
+    filteredCollection,
     isCreateMode,
     onToggleCollectionModal,
     setSearchValue,
     isOpenCollectionModal,
   } = useAnimeDetailsContext();
 
-  const isCollectionExist = availableCollection.length !== 0;
+  const isCollectionExist = filteredCollection.length !== 0;
+  const isAvailableCollectionExist = availableCollection.length !== 0;
 
   return (
     <>
@@ -29,7 +30,7 @@ export const AddToCollectionButton = () => {
       <Modal
         headerContent={
           !isCreateMode &&
-          isCollectionExist && (
+          isAvailableCollectionExist && (
             <SearchInput
               onSearch={setSearchValue}
               color="black"

@@ -1,3 +1,4 @@
+import { AnimeDetails } from "@/types";
 import { gql } from "@apollo/client";
 
 export const GET_ANIME_DETAILS = gql`
@@ -29,23 +30,3 @@ export interface AnimeDetailsProps {
   Media: AnimeDetails;
 }
 
-export interface AnimeDetails {
-  id: number;
-  title: {
-    romaji: string;
-    english: string;
-    native: string;
-  };
-  description: string;
-  coverImage: {
-    extraLarge: string;
-    color: string;
-  };
-  bannerImage: string;
-  episodes: number;
-  duration: number;
-  status: string;
-  genres: string[];
-  averageScore: number;
-  isAdult: boolean;
-}

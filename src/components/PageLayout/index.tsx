@@ -62,6 +62,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
         </PageContainer>
       </Flex>
       {!isLarge && <ActionBar />}
+      {/* this is mobile safe area */}
       {!isLarge && isStandalone && <Flex h="2em" bg="gray.100" />}
     </Flex>
   );

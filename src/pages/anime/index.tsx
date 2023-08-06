@@ -6,19 +6,13 @@ import {
   SimpleGrid,
   Spacer,
 } from "@chakra-ui/react";
-import type { AnimeItem } from "@/queries/getAnimeList";
 import { MovieItem } from "@/components/Movie/MovieItem";
 import { useGetAnimeList } from "@/hooks/useGetAnimeList";
 import { useRouter } from "next/router";
 import { Pagination } from "@/components/base/Pagination";
 import { NextSeo } from "next-seo";
 import { EmptyMessage } from "@/components/base/EmptyMessage";
-export interface WatchlistItem {
-  id: string;
-  title: string;
-  imageUrl: string | null;
-  watchlist: AnimeItem[];
-}
+import type { AnimeItem } from "@/types";
 
 const sampleAnimeItem: AnimeItem = {
   id: 1,

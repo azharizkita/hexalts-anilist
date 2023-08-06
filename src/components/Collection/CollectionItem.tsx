@@ -1,4 +1,4 @@
-import { AnimeItem } from "@/queries/getAnimeList";
+import { AnimeItem } from "@/types";
 import {
   Flex,
   Icon,
