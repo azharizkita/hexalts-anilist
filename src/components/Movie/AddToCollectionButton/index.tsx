@@ -1,4 +1,4 @@
-import { Flex, IconButton } from "@chakra-ui/react";
+import { Flex, IconButton, Text } from "@chakra-ui/react";
 import { MdCheck, MdClose, MdPlaylistAdd } from "react-icons/md";
 import { Modal } from "@/components/base/Modal";
 import { SearchInput } from "../../base/SearchInput";
@@ -23,18 +23,21 @@ export const AddToCollectionButton = () => {
 
   return (
     <>
-      <Flex gap="0.5em">
+      <Flex gap="0.5em" align="center">
         {isAddMode && (
-          <IconButton
-            isDisabled={selectedAnime.length === 0}
-            onClick={onToggleCollectionModal}
-            icon={<MdCheck />}
-            shadow="md"
-            size="sm"
-            colorScheme="blue"
-            borderRadius="full"
-            aria-label="Remove"
-          />
+          <>
+            <Text color="gray.600" fontSize="sm" fontWeight="semibold">Select any anime below</Text>
+            <IconButton
+              isDisabled={selectedAnime.length === 0}
+              onClick={onToggleCollectionModal}
+              icon={<MdCheck />}
+              shadow="md"
+              size="sm"
+              colorScheme="blue"
+              borderRadius="full"
+              aria-label="Remove"
+            />
+          </>
         )}
         <IconButton
           onClick={onClickAddMode}

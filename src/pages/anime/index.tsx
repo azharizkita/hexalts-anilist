@@ -59,7 +59,7 @@ const AnimePage = () => {
   return (
     <Flex direction="column" overflow="auto" h="100%">
       <Flex direction="column" gap="1em">
-        <Flex justify="space-between" justifyItems="center">
+        <Flex justify="space-between" justifyItems="center" align="center">
           <Heading>Anime</Heading>
           <AddToCollectionButton />
         </Flex>
