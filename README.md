@@ -1,3 +1,7 @@
+## Deployment
+
+https://hexalts-anilist.vercel.app/
+
 ## API limitations
 
 - pagination seems to always return maximum number of `5000 / page size` instead of the real maximum page.
