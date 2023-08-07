@@ -38,7 +38,7 @@ export const ModalContent = () => {
 
   if (!isCreateMode && animeInCollection.length === 0) {
     const emptyMessage = !isCollectionExist
-      ? `${animeData.title?.romaji} as not been added into any collection`
+      ? `${animeData?.title?.romaji} as not been added into any collection`
       : undefined;
     return <EmptyMessage message={emptyMessage} />;
   }

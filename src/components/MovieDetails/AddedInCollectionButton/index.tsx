@@ -28,7 +28,7 @@ export const AddedInCollectionButton = () => {
         }
         isOpen={isOpen}
         onToggle={onToggle}
-        title={`${animeData.title?.romaji} in collections`}
+        title={`${animeData?.title?.romaji} in collections`}
         justifyContent={!isExistInCollections ? "initial" : "center"}
       >
         <Flex

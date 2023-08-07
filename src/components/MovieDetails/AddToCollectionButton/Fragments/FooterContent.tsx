@@ -40,12 +40,12 @@ export const FooterContent = () => {
   const footerMessage =
     !isCreateMode && isCollectionExist && availableCollection.length !== 0 ? (
       <>
-        Adding &quot;{animeData.title?.romaji}&quot; into{" "}
+        Adding &quot;{animeData?.title?.romaji}&quot; into{" "}
         {selectedCollection.length} collections
       </>
     ) : (
       <>
-        Seems like &quot;{animeData.title?.romaji}&quot; has been added into
+        Seems like &quot;{animeData?.title?.romaji}&quot; has been added into
         every available collection. Consider making a new collection first.
       </>
     );
