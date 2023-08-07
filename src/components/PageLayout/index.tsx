@@ -45,7 +45,6 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
     const start = () => {
       timestamp = Date.now();
       interval = setInterval(() => {
-        console.log("sdsasad");
         if (Date.now() - timestamp > 150) {
           setIsChangingRoute(true);
         }

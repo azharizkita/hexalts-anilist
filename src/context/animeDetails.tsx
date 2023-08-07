@@ -15,7 +15,7 @@ interface AnimeDetailsContextType {
   availableCollection: WatchlistItem[];
   animeInCollection: WatchlistItem[];
   currentAnimeItemData: Partial<AnimeItem>;
-  animeData: Partial<AnimeDetails>;
+  animeData: Partial<AnimeDetails> | undefined;
   isChecking: boolean;
   isError: boolean;
   isAddButtonDisabled: boolean;
@@ -41,12 +41,10 @@ interface AnimeDetailsContextType {
 
 interface AnimeDetailsContextProviderProps {
   children: ReactNode;
-  animeData: AnimeDetails;
+  animeData?: Partial<AnimeDetails>;
 }
 
-const useCollection = (animeData: AnimeDetails) => {
-  const { bannerImage, coverImage, id, title } = animeData;
-
+const useCollection = (animeData?: Partial<AnimeDetails>) => {
   const [isCreateMode, setIsCreateMode] = useState(false);
   const [selectedCollection, setSelectionCollection] = useState<string[]>([]);
   const { collections, addCollectionEntry, addToCollectionWatchlist } =
@@ -74,10 +72,17 @@ const useCollection = (animeData: AnimeDetails) => {
   };
 
   const currentAnimeItemData: AnimeItem = {
-    bannerImage,
-    coverImage,
-    id,
-    title,
+    bannerImage: animeData?.bannerImage ?? "",
+    coverImage: animeData?.coverImage ?? {
+      color: "",
+      extraLarge: "",
+    },
+    id: animeData?.id ?? 0,
+    title: animeData?.title ?? {
+      english: "",
+      native: "",
+      romaji: "",
+    },
   };
 
   const _handleInputChange = useCallback(
@@ -150,7 +155,7 @@ const useCollection = (animeData: AnimeDetails) => {
 
   const animeInCollection = useMemo(() => {
     return collections.filter((collection) =>
-      collection.watchlist.some((watchitem) => watchitem.id === animeData.id)
+      collection.watchlist.some((watchitem) => watchitem.id === animeData?.id)
     );
   }, [collections, animeData]);
 
@@ -214,7 +219,7 @@ const AnimeDetailsContextProvider = ({
   children,
   animeData,
 }: AnimeDetailsContextProviderProps) => {
-  const values = useCollection({ ...animeData });
+  const values = useCollection(animeData);
   return (
     <AnimeDetailsContext.Provider value={values}>
       {children}
