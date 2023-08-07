@@ -1,11 +1,12 @@
-import { Container, Flex, useMediaQuery } from "@chakra-ui/react";
+import { Flex, Spinner, useMediaQuery } from "@chakra-ui/react";
 import { NavigationBar } from "./Fragments/NavigationBar";
 import React, { useEffect, useRef, useState } from "react";
 import { ActionBar } from "./Fragments/ActionBar";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { PageContainer } from "./Fragments/PageContainer";
-
+import Router from "next/router";
+import { PageLoader } from "../PageLoader";
 interface PageLayoutProps {
   children: React.ReactNode;
 }
@@ -15,6 +16,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
   const [isLarge] = useMediaQuery("(min-width: 625px)");
   const [isStandalone, setIsStandalone] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
+  const [isChangingRoute, setIsChangingRoute] = useState(false);
 
   const flexRef = useRef<HTMLDivElement>(null);
 
@@ -36,6 +38,23 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    const start = () => {
+      setIsChangingRoute(true);
+    };
+    const end = () => {
+      setIsChangingRoute(false);
+    };
+    Router.events.on("routeChangeStart", start);
+    Router.events.on("routeChangeComplete", end);
+    Router.events.on("routeChangeError", end);
+    return () => {
+      Router.events.off("routeChangeStart", start);
+      Router.events.off("routeChangeComplete", end);
+      Router.events.off("routeChangeError", end);
+    };
+  }, []);
+
   return (
     <Flex w="100vw" h="full" ref={flexRef} direction="column" bg="black">
       <NavigationBar />
@@ -48,7 +67,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
       >
         <PageContainer>
           <motion.div
-            key={pathname}
+            key={isChangingRoute ? "loader" : pathname}
             style={{ height: "100%" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -59,7 +78,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
               damping: 20,
             }}
           >
-            {children}
+            {isChangingRoute ? <PageLoader /> : children}
           </motion.div>
         </PageContainer>
       </Flex>

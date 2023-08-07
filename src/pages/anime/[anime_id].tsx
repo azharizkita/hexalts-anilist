@@ -28,6 +28,7 @@ import {
   AnimeDetailsProps,
   GET_ANIME_DETAILS,
 } from "@/queries/getAnimeDetails";
+import { PageLoader } from "@/components/PageLoader";
 
 const AnimeDetailsPage = (props: AnimeDetails) => {
   const {
@@ -198,23 +199,7 @@ export default function AnimeDetail({ seoData }: { seoData?: AnimeDetails }) {
   }, [error]);
 
   if (!data) {
-    return (
-      <Flex
-        h="full"
-        w="full"
-        direction="column"
-        justify="center"
-        align="center"
-      >
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      </Flex>
-    );
+    return <PageLoader />;
   }
   return (
     <CollectionContextProvider>
