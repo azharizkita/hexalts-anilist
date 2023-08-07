@@ -22,6 +22,12 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { useEffect } from "react";
 import { AnimeDetails } from "@/types";
 import { ShareButton } from "@/components/ShareButton";
+import { GetServerSideProps } from "next";
+import { anilistClient } from "@/config/apolloClient";
+import {
+  AnimeDetailsProps,
+  GET_ANIME_DETAILS,
+} from "@/queries/getAnimeDetails";
 
 const AnimeDetailsPage = (props: AnimeDetails) => {
   const {
@@ -172,12 +178,18 @@ const AnimeDetailsPage = (props: AnimeDetails) => {
   );
 };
 
-export default function AnimeDetail() {
+export default function AnimeDetail({ seoData }: { seoData?: AnimeDetails }) {
   const { query, push } = useRouter();
   const { anime_id } = query;
 
   const animeId = anime_id as string;
   const { data, error } = useGetAnimeDetails({ id: animeId });
+
+  const seoTitle = seoData ? seoData.title.romaji : data?.title.romaji;
+  const seoDescription = seoData ? seoData.description : data?.description;
+  const seoImage = seoData
+    ? seoData.coverImage.extraLarge
+    : data?.coverImage.extraLarge;
 
   useEffect(() => {
     if (!error) {
@@ -208,11 +220,27 @@ export default function AnimeDetail() {
   return (
     <CollectionContextProvider>
       <AnimeDetailsContextProvider animeData={data}>
-        <NextSeo title={data.title.romaji} description={data.description} />
+        <NextSeo
+          title={seoTitle}
+          description={seoDescription}
+          openGraph={{
+            images: [
+              {
+                url:
+                  seoImage ?? "https://hexalts-anilist.vercel.app/banner.png",
+              },
+            ],
+          }}
+        />
         <AnimeDetailsPage {...data} />
       </AnimeDetailsContextProvider>
     </CollectionContextProvider>
   );
+}
+
+interface ErrorResponse {
+  message: string;
+  status: number;
 }
 
 // i am completely aware that serverside props might suits better for
@@ -220,32 +248,52 @@ export default function AnimeDetail() {
 //
 // https://anilist.gitbook.io/anilist-apiv2-docs/overview/rate-limiting
 //
-// I decided not to put the gql in the server side to avoid unintentional
-// rate limit blocking.
+// I decided to make additional condition so the page would act normally
+// when server side achieve rate limit.
 //
-// but here is the code as a prove that I have tried to implement
-// SEO improvement via serverside props
-//
-// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-//   if (params?.anime_id) {
-//     const animeId = params.anime_id as string;
-//     const { data, error } = await anilistClient.query<AnimeDetails>({
-//       query: GET_ANIME_DETAILS,
-//       variables: { id: animeId },
-//     });
-//     if (!error) {
-//       return {
-//         props: {
-//           data,
-//           notFound: false,
-//         },
-//       };
-//     }
-//     return {
-//       notFound: true,
-//     };
-//   }
-//   return {
-//     notFound: true,
-//   };
-// };
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  try {
+    if (params?.anime_id) {
+      const animeId = params.anime_id as string;
+      const { data } = await anilistClient.query<AnimeDetailsProps>({
+        query: GET_ANIME_DETAILS,
+        variables: { id: animeId },
+      });
+      return {
+        props: {
+          seoData: data.Media,
+          notFound: false,
+        },
+      };
+    }
+  } catch (err) {
+    // @ts-ignore
+    const errors = err.graphQLErrors as ErrorResponse[];
+
+    // normal behavior but returns no SEO data
+    // https://anilist.gitbook.io/anilist-apiv2-docs/overview/rate-limiting
+    if (errors?.some((error) => error.status === 429)) {
+      return {
+        props: {
+          notFound: false,
+        },
+      };
+    }
+
+    // not found
+    if (errors?.some((error) => error.status === 404)) {
+      return {
+        props: {
+          notFound: true,
+        },
+      };
+    }
+
+    // trigger ISR page
+    throw new Error("Something went wrong");
+  }
+
+  return {
+    props: {},
+  };
+};

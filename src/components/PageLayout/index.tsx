@@ -14,6 +14,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
   const { pathname } = useRouter();
   const [isLarge] = useMediaQuery("(min-width: 625px)");
   const [isStandalone, setIsStandalone] = useState(false);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
 
   const flexRef = useRef<HTMLDivElement>(null);
 
@@ -27,6 +28,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
     setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
 
     appHeight();
+    setIsPageLoaded(true);
     window.addEventListener("resize", appHeight);
 
     return () => {
@@ -61,9 +63,11 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
           </motion.div>
         </PageContainer>
       </Flex>
-      {!isLarge && <ActionBar />}
-      {/* this is mobile safe area */}
-      {!isLarge && isStandalone && <Flex h="2em" bg="gray.100" />}
+      {!isLarge && isPageLoaded && <ActionBar />}
+      {!isLarge && isStandalone && isPageLoaded && (
+        // this is mobile safe area
+        <Flex h="2em" bg="gray.100" />
+      )}
     </Flex>
   );
 };
