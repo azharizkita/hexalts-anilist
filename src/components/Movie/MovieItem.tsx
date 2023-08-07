@@ -80,7 +80,8 @@ export const MovieItem = ({
         )}
       </Flex>
       <Flex
-        {...(!previewMode && { as: LinkOverlay, href: `/anime/${id}` })}
+        as={LinkOverlay}
+        {...(!previewMode && { href: `/anime/${id}` })}
         h="205px"
         w="145px"
         direction="column"
