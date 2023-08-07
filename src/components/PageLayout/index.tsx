@@ -39,11 +39,25 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
   }, []);
 
   useEffect(() => {
+    let timestamp = 0;
+    let interval: NodeJS.Timer | null = null;
+
     const start = () => {
-      setIsChangingRoute(true);
+      timestamp = Date.now();
+      interval = setInterval(() => {
+        console.log("sdsasad");
+        if (Date.now() - timestamp > 150) {
+          setIsChangingRoute(true);
+        }
+      }, 74);
     };
+
     const end = () => {
       setIsChangingRoute(false);
+      timestamp = 0;
+      if (interval) {
+        clearInterval(interval);
+      }
     };
     Router.events.on("routeChangeStart", start);
     Router.events.on("routeChangeComplete", end);
