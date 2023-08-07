@@ -15,15 +15,31 @@ const NavigationBarWrapper = styled(Flex)`
 
 export const NavigationBar = () => {
   const [isLarge] = useMediaQuery("(min-width: 625px)");
-  const { push, query } = useRouter();
+  const { push, query, pathname } = useRouter();
   const { keyword = "", page = 1 } = query;
+
+  const handleChangePage = (target: string) => {
+    const _target = `/${target}`;
+    // do nothing if current path is the same as target
+    if (pathname === _target) {
+      return;
+    }
+    push(_target);
+  };
 
   return (
     <NavigationBarWrapper gap="1em" height={isLarge ? "4em" : "5em"}>
       {isLarge && (
         <>
           <Flex w="6em">
-            <Link href="/anime">
+            <Link
+              href="/anime"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleChangePage("anime");
+              }}
+            >
               <Image
                 src="/hexalts_x_anilist.svg"
                 alt="logo"
@@ -52,7 +68,7 @@ export const NavigationBar = () => {
         <>
           <Divider orientation="vertical" />
           <IconButton
-            onClick={() => push("/collection")}
+            onClick={() => handleChangePage("collection")}
             borderRadius="full"
             aria-label="watchlist-button"
             icon={<MdOutlinePlaylistPlay />}

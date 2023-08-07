@@ -18,6 +18,15 @@ export const ActionBar = () => {
     setTabIndex(0);
   }, [pathname]);
 
+  const handleChangePage = (target: string) => {
+    const _target = `/${target}`;
+    // do nothing if current path is the same as target
+    if (pathname === _target) {
+      return;
+    }
+    push(_target);
+  };
+
   return (
     <Tabs
       isFitted
@@ -33,7 +42,7 @@ export const ActionBar = () => {
           as={Flex}
           flexDirection="column"
           bg="transparent"
-          onClick={() => push("/anime")}
+          onClick={() => handleChangePage("anime")}
         >
           <Icon boxSize="1.5em" as={MdMovie} />
           <Text fontSize="xs">Anime</Text>
@@ -44,7 +53,7 @@ export const ActionBar = () => {
           as={Flex}
           flexDirection="column"
           bg="transparent"
-          onClick={() => push("/collection")}
+          onClick={() => handleChangePage("collection")}
         >
           <Icon boxSize="1.5em" as={MdPlaylistPlay} />
           <Text fontSize="xs">My collection</Text>
