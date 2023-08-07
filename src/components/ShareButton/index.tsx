@@ -3,14 +3,9 @@ import { MdShare } from "react-icons/md";
 
 interface ShareButtonProps extends IconButtonProps {
   title: string | undefined;
-  description: string | undefined;
 }
 
-export const ShareButton = ({
-  title,
-  description,
-  ...rest
-}: ShareButtonProps) => {
+export const ShareButton = ({ title, ...rest }: ShareButtonProps) => {
   const toast = useToast();
   const handleShareClick = async () => {
     const titleTag =
@@ -18,14 +13,9 @@ export const ShareButton = ({
         .querySelector('meta[property="og:title"]')
         ?.getAttribute("content") ?? undefined;
 
-    const descriptionTag =
-      document
-        .querySelector('meta[property="og:description"]')
-        ?.getAttribute("content") ?? undefined;
-
     const payload = {
       title: title ?? titleTag,
-      text: description ?? descriptionTag,
+      text: `Check this out: ${title ?? titleTag} at Hexalts x AniList`,
       url: window.location.href,
     };
 

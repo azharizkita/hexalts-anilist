@@ -76,7 +76,6 @@ const AnimeDetailsPage = (props: AnimeDetails) => {
         />
         <ShareButton
           title={title.romaji}
-          description={description}
           aria-label="share-button"
           position="absolute"
           top="1em"
