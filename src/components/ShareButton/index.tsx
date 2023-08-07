@@ -1,5 +1,4 @@
-import { IconButton, IconButtonProps } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { IconButton, IconButtonProps, useToast } from "@chakra-ui/react";
 import { MdShare } from "react-icons/md";
 
 interface ShareButtonProps extends IconButtonProps {
@@ -12,13 +11,7 @@ export const ShareButton = ({
   description,
   ...rest
 }: ShareButtonProps) => {
-  const [canShare, setCanShare] = useState(false);
-  useEffect(() => {
-    if (navigator.canShare && navigator.canShare()) {
-      setCanShare(true);
-    }
-  }, []);
-
+  const toast = useToast();
   const handleShareClick = async () => {
     const titleTag =
       document
@@ -30,22 +23,34 @@ export const ShareButton = ({
         .querySelector('meta[property="og:description"]')
         ?.getAttribute("content") ?? undefined;
 
+    const payload = {
+      title: title ?? titleTag,
+      text: description ?? descriptionTag,
+      url: window.location.href,
+    };
+
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: title ?? titleTag,
-          text: description ?? descriptionTag,
-          url: window.location.href,
-        });
+        await navigator.share(payload);
       } catch (error) {
-        console.error("Error sharing:", error);
+        console.error("Failed to share:", error);
       }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(payload.url);
+      toast({
+        title: "URL copied into clipboard",
+        description: "Share it to your friends!",
+        status: "success",
+        duration: 2500,
+        position: "top-right",
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Failed to copy: ", error);
     }
   };
-
-  if (!canShare) {
-    return null;
-  }
 
   return (
     <IconButton
