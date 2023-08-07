@@ -15,7 +15,9 @@ export const ShareButton = ({ title, ...rest }: ShareButtonProps) => {
 
     const payload = {
       title: title ?? titleTag,
-      text: `Check this out: ${title ?? titleTag} at Hexalts x AniList`,
+      text: `Check this out: ${title ?? titleTag} at Hexalts x AniList: ${
+        window.location.href
+      }`,
       url: window.location.href,
     };
 
