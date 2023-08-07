@@ -1,5 +1,5 @@
 import { IconButton, IconButtonProps } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdShare } from "react-icons/md";
 
 interface ShareButtonProps extends IconButtonProps {
@@ -13,9 +13,11 @@ export const ShareButton = ({
   ...rest
 }: ShareButtonProps) => {
   const [canShare, setCanShare] = useState(false);
-  if (navigator.canShare && navigator.canShare()) {
-    setCanShare(true);
-  }
+  useEffect(() => {
+    if (navigator.canShare && navigator.canShare()) {
+      setCanShare(true);
+    }
+  }, []);
 
   const handleShareClick = async () => {
     const titleTag =
