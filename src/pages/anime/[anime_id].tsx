@@ -21,6 +21,7 @@ import { AddedInCollectionButton } from "@/components/MovieDetails/AddedInCollec
 import { MdArrowBackIosNew } from "react-icons/md";
 import { useEffect } from "react";
 import { AnimeDetails } from "@/types";
+import { ShareButton } from "@/components/ShareButton";
 
 const AnimeDetailsPage = (props: AnimeDetails) => {
   const {
@@ -44,7 +45,7 @@ const AnimeDetailsPage = (props: AnimeDetails) => {
   return (
     <Flex direction="column" overflow="auto" h="100%" w="full" gap="2em">
       <Flex
-        h="12em"
+        h="14em"
         w="full"
         overflow="hidden"
         flexShrink={0}
@@ -66,6 +67,14 @@ const AnimeDetailsPage = (props: AnimeDetails) => {
           w="full"
           src={bannerImage}
           alt="anime-banner"
+        />
+        <ShareButton
+          title={title.romaji}
+          description={description}
+          aria-label="share-button"
+          position="absolute"
+          top="1em"
+          right="1em"
         />
       </Flex>
       <Container maxW="container.xl" as={Flex} gap="1em">
