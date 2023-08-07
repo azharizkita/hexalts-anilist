@@ -2,6 +2,10 @@
 
 https://hexalts-anilist.vercel.app/
 
+## PWA support
+
+this app is PWA supported! you can save it directly into your homescreen/desktop.
+
 ## API limitations
 
 - pagination seems to always return maximum number of `5000 / page size` instead of the real maximum page.
